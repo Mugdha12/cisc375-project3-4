@@ -18,7 +18,7 @@
     <script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <style>
-#mapid { height: 600px; width: 600px; margin-left: 35em; }
+#mapid { height: 600px; width: 600px; }
 #header{text-align: center;}
 </style>
 
@@ -43,6 +43,21 @@
 						</tr>
 					</thead>
 		</table>
+		<table id='firstTable'>
+			<thead>
+				<tr>
+					<th> Codes</th>
+					<th> incident</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="row in rows">
+					<td>{{row.code}}</td>
+					<td>{{row.incident_type}}</td>
+				</tr>
+			</tbody>
+		</table>
+
 
 
 		<div id="mapid"></div>
