@@ -13,7 +13,9 @@
    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
    crossorigin=""></script>
-
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <style>
 #mapid { height: 600px; width: 600px; margin-left: 35em; }
@@ -33,26 +35,36 @@
 					<input type="text" name="longitude">
 			</form>
 		</div>
-
+		<table id = "incidents"> </table>
 
 
 		<div id="mapid"></div>
 		<script>
-		var lat;
-		var long; 
+				var lat;
+				var long; 
 
-		var mymap = L.map('mapid').setView([44.9,-93.09],16); //maps the center of St.Paul MN
-		mymap.setMinZoom(12);
-		var marker = L.marker([44.9,-93.09]).addTo(mymap);	// create a pop up w/ date, time incident and a delete button 
-		marker.bindPopup("<b>Incident!</b><br>date and time and delete button.").openPopup();
+				var mymap = L.map('mapid').setView([44.9,-93.09],16); //maps the center of St.Paul MN
+				mymap.setMinZoom(12);
+				var marker = L.marker([44.9,-93.09]).addTo(mymap);	// create a pop up w/ date, time incident and a delete button 
+				marker.bindPopup("<b>Incident!</b><br>date and time and delete button.").openPopup();
 
 
-		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
-	}).addTo(mymap);
+				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				maxZoom: 18,
+				id: 'mapbox/streets-v11',
+				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
+				}).addTo(mymap);
+		</script>
+		<div class = "codes"> </div>
+		<span class = "codes"> Table :</span>
+		<script type="application/javascript">
+			{
+				$.getJSON("http://localhost:8000/codes/", function(data){
+					console.log(data);
+				});
+
+			}
 		</script>
 		
 	</body>
