@@ -15,10 +15,11 @@
    crossorigin=""></script>
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
 </head>
 <style>
-#mapid { height: 600px; width: 600px; }
+#mapid { height: 600px; width: 600px; margin-left: 35em; }
 #header{text-align: center;}
 </style>
 
@@ -35,32 +36,34 @@
 					<input type="text" name="longitude">
 			</form>
 		</div>
-		<table id = "incidents" style="visibility:hidden"> 
-				<thead>
-						<tr>
-							<th>Code</th>
-							<th>Incident Type</th>
-						</tr>
-					</thead>
-		</table>
-		<table id='firstTable'>
-			<thead>
-				<tr>
-					<th> Codes</th>
-					<th> incident</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="row in rows">
-					<td>{{row.code}}</td>
-					<td>{{row.incident_type}}</td>
-				</tr>
-			</tbody>
-		</table>
-
-
-
 		<div id="mapid"></div>
+
+		<table id='firstTable'>
+				<thead>
+					<tr>
+						<th> Date</th>
+						<th> Time</th>
+						<th> Code</th>
+						<th> Incident</th>
+						<th> Police Grid</th>
+						<th> Neighborhood Number</th>
+						<th> Block</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="row in rows">
+					<!---<td>{{row}}</td>--->
+						<td>{{row.date}}</td>
+						<td>{{row.time}}</td>
+						<td>{{row.code}}</td>
+						<td>{{row.incident}}</td>
+						<td>{{row.police_grid}}</td>
+						<td>{{row.neighborhood_number}}</td>
+						<td>{{row.block}}</td>
+					</tr>
+				</tbody>
+			</table>
+
 		<script>
 				var lat;
 				var long; 
@@ -98,19 +101,21 @@
 
 				L.marker([44.90,-93.09],{icon:greenIcon}).addTo(mymap);
 
-		</script>		
+		</script>	
 		<script type="application/javascript">
-			{
-				$.getJSON("http://localhost:8000/codes/", function(data){
-					$('#incidents').css("visibility", "visible").css("border", "1px solid green");
-					$('#incidents').append("<tbody>");
-					for (var counter = 0; counter < data.length; counter++) {
-					$('#incidents').append("<tr><td>" + data[counter]["code"] + "</td><td>" + data[counter]["incident_type"] +  "</td></tr>");
-					}
-					$('#incidents').append("</tbody>");
-					$('th').css("border", "1px solid green");
-				});
-			}
+			console.log("here");
+			//Vue.component('firstTable',)
+			var firstTable = new Vue({
+				el:"#firstTable",
+				data:{
+					rows:{}
+				}
+			})
+			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
+				//console.log(data);
+				firstTable.rows = data;
+				//console.log(firstTable.rows);
+			});
 		</script>
 		
 	</body>
