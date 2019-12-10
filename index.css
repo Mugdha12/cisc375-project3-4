@@ -15,12 +15,17 @@ body{
 	 width: 600px; 
 	 float: right;
 }
+#input{
+	text-align: right;
+}
+#wrapper{
+	margin-left: 3em;
+	margin-right: 3em;
+}
 #header{
 	height: 3.5em;
 	font-size: 1.7vw;
 	text-align: center;
-	/* background-color: #DCEEF2;
-	background: 1px solid black; */
 
 }
 
@@ -31,5 +36,4 @@ p{
 #firstTable{float: left;}
 table{ border-collapse: collapse;}
 table, th, td { border: 1px solid black;}
-
 
