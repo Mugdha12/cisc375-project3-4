@@ -1,0 +1,14 @@
+@font-face {
+	font-family: Handlee;
+	src: url(handlee-regular.ttf);
+}
+*{
+	font-family: Handlee;
+}
+#mapid { height: 600px; width: 600px; float: right; }
+#header{text-align: center; font-size: 2vw;} 
+#input {text-align: right;}
+#firstTable{float: left;}
+table{ border-collapse: collapse;}
+table, th, td { border: 1px solid black;}
+th{height: 4vw; width: 5vw;}
