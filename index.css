@@ -2,24 +2,34 @@
 	font-family: Handlee;
 	src: url(handlee-regular.ttf);
 }
-*{
+/* *{
+	font-family: Handlee;
+	
+} */
+body{
+	background-color: #DCEEF2;
 	font-family: Handlee;
 }
 #mapid {
 	 height: 600px; 
 	 width: 600px; 
-	
-	}
-#header{text-align: center; font-size: 1.7vw;} 
-#input {text-align: right;}
+	 float: right;
+}
+#header{
+	height: 3.5em;
+	font-size: 1.7vw;
+	text-align: center;
+	/* background-color: #DCEEF2;
+	background: 1px solid black; */
+
+}
+
+p{
+	font-size: 20px;
+}
+
 #firstTable{float: left;}
 table{ border-collapse: collapse;}
 table, th, td { border: 1px solid black;}
-th{height: 4vw; width: 5vw;}
-.search-input {
-	font-family:Courier
-}
-.search-input,
-.leaflet-control-search {
-	max-width:400px;
-}
+
+
