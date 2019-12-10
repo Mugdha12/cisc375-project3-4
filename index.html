@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/> 
+   
    <!-- this is the js for the left let -->
    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -17,29 +18,25 @@
 	<script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
-	<link rel="stylesheet" href="index.css" ><link>
-	<link rel="stylesheet" href="normalize.css" ><link>
+
+	<link rel="stylesheet" href="css/index.css" ><link>
+	<link rel="stylesheet" href="css/normalize.css" ><link>
 
 
-	<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
-
-    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+	
 </head>
 
 	<body>
-		<div id=header>
+		<div id="header">
 			<h1> St.Paul Crime </h1>
+			 <p><a href="index.html">Data </a> |  	<a href="about.html">About Us</a></p>
 		</div>
+
 		<!-- the input that will have to be changed -->
-		<!-- <div id=input>
-			<p> Please input your Lan. and Long. infromation here </p>
+		<div id="input">
 			<form>
-					Latitude:<br>
-					<input type="text" name="latitude"><br>
-					Longitude:<br>
-					<input type="text" name="longitude">
+					 Please enter your address :
+					<input type="text" name="adsress">
 			</form>
 		</div>
 		<div id = "Incidents">
@@ -60,8 +57,7 @@
 		<div id="mapid">
 		</div>
 
-		<!-- search bar for the data -->
-		
+		<!-- check list  -->
 		<div id="app"> 
 				<ul>
 						<li v-for="(incident_type,key) in codes">
@@ -75,9 +71,7 @@
 					  </ul>
 					  <span> Checked:{{checked}}</span>
 
-
-
-
+	
 		<!-- the table of data  -->
 		<table id='firstTable'>
 				<thead>
@@ -144,6 +138,10 @@
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
 				id: 'mapbox/streets-v11',
+				maxBounds: [
+                    [44.890591, -93.207777],
+                    [44.991925, -93.004938]
+                ],
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
 				var popup = L.popup();
@@ -198,9 +196,14 @@
 
 		</script>	
 		<script type="application/javascript">
-			console.log("here");
-			//Vue.component('firstTable',)
-			
+
+			var firstTable = new Vue({
+				el:"#firstTable",
+				data:{
+					rows:{}
+				}
+			});
+
 			var app = new Vue({
 				el:"#app",
 				data:{
@@ -209,14 +212,16 @@
 					checked:{},
 					incidents:{}
 				}
-				//app.push(checked)
 			});
-			
-			console.log(app.checked);
-			 
+			// gets the data from the month Oct of 2019
+			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
+				firstTable.rows = data;
+			});
+			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;
 			});
+			//get the data from neighbirhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
 			});
@@ -227,6 +232,5 @@
 			});
 			
 		</script>  
-		
 	</body>
 </html>
