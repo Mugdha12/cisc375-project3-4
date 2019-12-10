@@ -5,10 +5,11 @@ var express = require('express');
 var sqlite3 = require('sqlite3');
 var bodyParser = require('body-parser');
 var js2xmlparser = require("js2xmlparser");
-
+var cors = require ('cors');
 var port = 8000;
 var db_filename = path.join(__dirname, 'db', 'stpaul_crime.sqlite3');
 
+// app.use(cors())
 var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.log('Error opening ' + db_filename);
