@@ -22,6 +22,7 @@ var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors());
 
 app.get('/codes', (req, res) => {
     var code = "";
