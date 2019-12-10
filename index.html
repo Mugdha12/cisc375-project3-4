@@ -19,6 +19,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
 	<link rel="stylesheet" href="index.css" ><link>
 	<link rel="stylesheet" href="normalize.css" ><link>
+
+
+	<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
 </head>
 
 	<body>
@@ -26,7 +33,7 @@
 			<h1> St.Paul Crime </h1>
 		</div>
 		<!-- the input that will have to be changed -->
-		<div id=input>
+		<!-- <div id=input>
 			<p> Please input your Lan. and Long. infromation here </p>
 			<form>
 					Latitude:<br>
@@ -40,6 +47,30 @@
 		<!-- the map  -->
 		<div id="mapid"></div>
 		<div id = "incidents"> </div>
+		</div> -->
+
+		<!-- the map  -->
+		<div id="mapid">
+				<div id=input>
+						<!-- <p> Please input your Lan. and Long. infromation here </p>
+						<form>
+								Latitude:<br>
+								<input type="text" name="latitude"><br>
+								Longitude:<br>
+								<input type="text" name="longitude">
+						</form> -->
+					</div>
+		</div>
+
+		<!-- search bar for the data -->
+		<div id=app> 
+			<label>  Seach information below:<br>  </label>
+			<input type="text" v-model="search" placeholder="Search information ..."/> 
+		</div>
+
+
+
+
 		<!-- the table of data  -->
 		<table id='firstTable'>
 				<thead>
@@ -66,7 +97,8 @@
 					</tr>
 				</tbody>
 			</table>
-
+			<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+			<script src="../src/leaflet-search.js"></script>
 		<script>
 				var lat;
 				var long; 
@@ -94,17 +126,33 @@
 						
 				}
 				mymap.on('click', onMapClick);
-
-				var greenIcon = L.icon ({
-					iconUrl: 'location.svg',
-
-					iconSize: [38,95],
-					iconAnchor: [22,94],
+				var markersLayer = new L.LayerGroup();  
+				mymap.addLayer(markersLayer); 
+				
+				// add the search bar to the map
+				var controlSearch = new L.Control.Search({
+					position:'topleft',    // where do you want the search bar?
+					layer: markersLayer,  // name of the layer
+					initial: false,
+					zoom: 11,        // set zoom to found location when searched
+					marker: false,
+					textPlaceholder: 'search...' // placeholder while nothing is searched
 				});
+				
+				mymap.addControl(controlSearch); // add it to the map
+				L.control.scale().addTo(map);
 
-				L.marker([44.90,-93.09],{icon:greenIcon}).addTo(mymap);
+        // Control 3: This add a Search bar
+            var searchControl = new L.esri.Controls.Geosearch().addTo(map);
 
+            var results = new L.LayerGroup().addTo(map);
 
+              searchControl.on('results', function(data){
+                results.clearLayers();
+                for (var i = data.results.length - 1; i >= 0; i--) {
+                  results.addLayer(L.marker(data.results[i].latlng));
+                }
+              });
 
 		</script>	
 		<script type="application/javascript">
