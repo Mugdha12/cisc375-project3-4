@@ -64,17 +64,16 @@
 		
 		<div id="app"> 
 				<ul>
-						<li v-for="incident in incidents">
-						  {{ incident}}
-						  <input type="checkbox" v-model="checked[incident]"/>
+						<li v-for="(incident_type,key) in codes">
+						  {{ incident_type}}
+						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-						<li v-for="neighborhood_number in neighborhood_numbers">
-								{{ neighborhood_number}}
-								<input type="checkbox" v-model="checked[neighborhood_number]"/>
+						<li v-for="(neighborhood_name,key) in neighborhoods">
+								{{ neighborhood_name}}
+								<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 					  </ul>
-					  <span>Checked : {{ checked }}</span>
-		</div>
+					  <span> Checked:{{checked}}</span>
 
 
 
@@ -92,9 +91,11 @@
 						<th> Block</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr v-for="row in rows">
+				<tbody >
+					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
+					<tr v-for="row in incidents" v-if="checked[row.neighborhood_number] || checked[row.code]">
 					<!---<td>{{row}}</td>--->
+
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
 						<td>{{row.code}}</td>
@@ -105,6 +106,7 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
 			<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
 			<script src="../src/leaflet-search.js"></script>
 		<script>
@@ -166,32 +168,32 @@
 		<script type="application/javascript">
 			console.log("here");
 			//Vue.component('firstTable',)
-			var firstTable = new Vue({
-				el:"#firstTable",
-				data:{
-					rows:{}
-				}
-			});
+			
 			var app = new Vue({
 				el:"#app",
 				data:{
-					incidents:{},
-					neighborhood_numbers:{},
-					checked:{}
+					codes:{},
+					neighborhoods:{},
+					checked:{},
+					incidents:{}
 				}
 				//app.push(checked)
 			});
-			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
-				//console.log(data);
-				firstTable.rows = data;
-				//console.log(firstTable.rows);
-			});
+			
+			console.log(app.checked);
+			 
 			$.getJSON("http://localhost:8000/codes", function(data){
-				app.incidents = data;
+				app.codes = data;
 			});
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
-				app.neighborhood_numbers = data;
+				app.neighborhoods = data;
 			});
+			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
+				//console.log(data);
+				app.incidents = data;
+				//console.log(firstTable.rows);
+			});
+			
 		</script>  
 		
 	</body>
