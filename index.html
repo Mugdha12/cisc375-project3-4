@@ -35,19 +35,11 @@
 					<input type="text" name="longitude">
 			</form>
 		</div>
-
+		<div id = "Incidents">
+		</div>
 		<!-- the map  -->
 		<div id="mapid"></div>
-
-		<!-- search bar for the data -->
-		<div id=app> 
-			<label>  Seach information below:<br>  </label>
-			<input type="text" v-model="search" placeholder="Search information ..."/> 
-		</div>
-
-
-
-
+		<div id = "incidents"> </div>
 		<!-- the table of data  -->
 		<table id='firstTable'>
 				<thead>
@@ -128,6 +120,18 @@
 				//console.log(data);
 				firstTable.rows = data;
 				//console.log(firstTable.rows);
+			});
+			$.getJSON("http://localhost:8000/codes", function(data){
+				var items = []
+				for(i = 0; i<data.length; i++)
+				{
+					items.push( data[i].code + "<input type=checkbox  id= data[i].code  onclick=myFunction()>" );
+					
+				}
+				$( "<ul/>", {
+    				"class": "my-new-list",
+   					 html: items.join( "" )
+  					}).appendTo( "body" );
 			});
 		</script>
 		
