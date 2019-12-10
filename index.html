@@ -45,19 +45,19 @@
 		<div id = "Incidents">
 		</div>-->
 		<!-- the map  -->
-		
+		<div id= "searchBox">
+				<p> Please input your Lan. and Long. infromation here </p>
+				<form>
+						Latitude:<br>
+						<input type="text" name="latitude" id = "lat" value = "44.9"><br>
+						Longitude:<br>
+						<input type="text" name="longitude" id = "lon" value = "-93.09">
+				</form>
+				<button onclick = "myfunct()"> Submit</button>
+		</div>
 
 		<!-- the map  -->
 		<div id="mapid">
-				<div id=input>
-						<!-- <p> Please input your Lan. and Long. infromation here </p>
-						<form>
-								Latitude:<br>
-								<input type="text" name="latitude"><br>
-								Longitude:<br>
-								<input type="text" name="longitude">
-						</form> -->
-					</div>
 		</div>
 
 		<!-- search bar for the data -->
@@ -107,17 +107,38 @@
 				</tbody>
 			</table>
 		</div>
-			<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
-			<script src="../src/leaflet-search.js"></script>
 		<script>
-				var lat;
-				var long; 
+			var exports = {};
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
+		<script src="https://unpkg.com/leaflet-drift-marker@1.0.3/lib/DriftMarker/Drift_Marker.js"></script>
+			<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
 
-				var mymap = L.map('mapid').setView([44.9,-93.09],16); //maps the center of St.Paul MN
+		<script>
+		
+	 	// Script for adding marker on map click
+	 	
+				var lat = document.getElementById("lat").value;
+				var long = document.getElementById("lon").value;
+				
+				var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+				osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+				osm = L.tileLayer(osmUrl, {
+				maxZoom: 18,
+				attribution: osmAttrib
+				});
+				//var map = L.map('map').setView([19.04469, 72.9258], 1).addLayer(osm);
+				var mymap = L.map('mapid').setView([44.9,-93.09],16).addLayer(osm); //maps the center of St.Paul MN
 				mymap.setMinZoom(11);
-				var marker = L.marker([44.9,-93.09]).addTo(mymap);	// create a pop up w/ date, time incident and a delete button 
-				marker.bindPopup("<b>Incident!</b><br>date and time and delete button.").openPopup();
-
+				var marker = new Drift_Marker([44.9,-93.09], {
+					draggable: true,
+					title: "Resource location",
+					alt: "Resource Location",
+					riseOnHover: true
+	 	    		}).addTo(mymap)
+	 	        .bindPopup("test").openPopup(); //delete button 
+				//marker.bindPopup("<b>Incident!</b><br>date and time and delete button.").openPopup();
 
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -127,20 +148,31 @@
 				}).addTo(mymap);
 				var popup = L.popup();
 				
-				function onMapClick (e){
-					
-					popup
-						.setLatLng(e.latlng)
-						.setContent("You have clicked: " + e.latlng.toString())
-						.openOn(mymap);
-						
+				function onMapClick(e) {
+					marker.slideTo(	e.latlng, {
+					duration: 2000
+					});
 				}
-				mymap.on('click', onMapClick);
+					mymap.on('click', onMapClick);
+					marker.slideTo(	[10, 10], {
+					duration: 2000
+				});
 				var markersLayer = new L.LayerGroup();  
-				mymap.addLayer(markersLayer); 
+				/*mymap.addLayer(markersLayer); 
+				var latlong = (function(){
+					dest: {
+						long: 0,
+						lat: 0
+					};
+				return {
+
+				}
+				});
 				
+				)**/
+				console.log(lat + ":" + long);
 				// add the search bar to the map
-				var controlSearch = new L.Control.Search({
+				/*var controlSearch = new L.Control.Search({
 					position:'topleft',    // where do you want the search bar?
 					layer: markersLayer,  // name of the layer
 					initial: false,
@@ -162,7 +194,7 @@
                 for (var i = data.results.length - 1; i >= 0; i--) {
                   results.addLayer(L.marker(data.results[i].latlng));
                 }
-              });
+              });*/
 
 		</script>	
 		<script type="application/javascript">
