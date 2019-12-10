@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Index Pages</title>
+	<title>Index Page</title>
  
 	<!-- this is the css of leaf let -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -19,13 +19,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
 </head>
 <style>
-#mapid { height: 600px; width: 600px; margin-left: 35em; }
+#mapid { height: 600px; width: 600px;  }
 #header{text-align: center;}
 </style>
 
 	<body>
 		<div id=header>
-			<h1>St.Paul Crime </h1>
+			<h1> St.Paul Crime </h1>
 		</div>
 		<div id=input>
 			<p> Please input your Lan. and Long. infromation here </p>
@@ -69,7 +69,7 @@
 				var long; 
 
 				var mymap = L.map('mapid').setView([44.9,-93.09],16); //maps the center of St.Paul MN
-				mymap.setMinZoom(12);
+				mymap.setMinZoom(11);
 				var marker = L.marker([44.9,-93.09]).addTo(mymap);	// create a pop up w/ date, time incident and a delete button 
 				marker.bindPopup("<b>Incident!</b><br>date and time and delete button.").openPopup();
 
@@ -100,6 +100,8 @@
 				});
 
 				L.marker([44.90,-93.09],{icon:greenIcon}).addTo(mymap);
+
+				
 
 		</script>	
 		<script type="application/javascript">
