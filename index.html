@@ -34,9 +34,19 @@
 		<div id="mapid"></div>
 
 		<!-- search bar for the data -->
-		<div id=app> 
-			<label>  Seach information below:<br>  </label>
-			<input type="text" v-model="search" placeholder="Search information ..."/> 
+		
+		<div id="app"> 
+				<ul>
+						<li v-for="incident in incidents">
+						  {{ incident}}
+						  <input type="checkbox" v-model="checked[incident]"/>
+						</li>
+						<li v-for="neighborhood_number in neighborhood_numbers">
+								{{ neighborhood_number}}
+								<input type="checkbox" v-model="checked[neighborhood_number]"/>
+						</li>
+					  </ul>
+					  <span>Checked : {{ checked }}</span>
 		</div>
 
 		<!-- the table of data  -->
@@ -113,7 +123,16 @@
 				data:{
 					rows:{}
 				}
-			})
+			});
+			var app = new Vue({
+				el:"#app",
+				data:{
+					incidents:{},
+					neighborhood_numbers:{},
+					checked:{}
+				}
+				//app.push(checked)
+			});
 			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
 				//console.log(data);
 				firstTable.rows = data;
