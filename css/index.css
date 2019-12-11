@@ -38,3 +38,20 @@ table{ border-collapse: collapse;}
 table, th, td { border: 1px solid black;}
 
 
+/* For the about images */
+#na li {
+	display: inline-block;
+	padding: 1em;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+}
+#na li a{ display: inline-block;}
+#na li a:hover{background-color: #ddd;} 
+#na{
+	list-style-type: none;
+	padding: 0;
+	text-align: left;
+	font-family: Daugther;
+	font-size: 1vw;
+}
+#icon{ width: 7em; height: 7em;}
