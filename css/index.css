@@ -19,8 +19,8 @@ body{
 	text-align: right;
 }
 #wrapper{
-	margin-left: 3em;
-	margin-right: 3em;
+	margin-left: 5em;
+	margin-right: 5em;
 }
 #header{
 	height: 3.5em;
@@ -55,3 +55,4 @@ table, th, td { border: 1px solid black;}
 	font-size: 1vw;
 }
 #icon{ width: 7em; height: 7em;}
+#facts{float: right;}
