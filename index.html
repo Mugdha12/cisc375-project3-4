@@ -22,6 +22,8 @@
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 
+	
+
 
 	
 </head>
@@ -59,18 +61,28 @@
 						<button @click='toggle = !toggle' id="first"> Filter  </button>
 						
 				</div>
-				<div v-show='!toggle'  id="app">
-						
+				<div v-show='!toggle' id="filters" >
+				
+					<ul >
+						<!-- time -->
+						<button @click='toggle = !toggle'> Time </button><br>
+						<label for="start">Start Time:</label>
+						<input type="number" min="0" max="23" placeholder="23">:
+						<input type="number" min="0" max="59" placeholder="00">:
+						<input type="number" min="0" max="59" placeholder="00"><br>
+						<label for="start"> End Time:</label>
+						<input type="number" min="0" max="23" placeholder="23">:
+						<input type="number" min="0" max="59" placeholder="00">:
+						<input type="number" min="0" max="59" placeholder="00"><br>
 						<!-- calendar -->
+						<button @click='toggle = !toggle'> Date </button><br>
 						<label for="start">Start Date:</label>
 						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-12-31"> <br>
 						<label for="start">End Date:</label>
-						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-12-31">
-
-					<ul >
+						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-12-31"><br>
 						<!-- checklist for incident -->
-						<button @click='toggle[incident] = !toggle' id="first"> Incident </button>
-						<li  v-if="first" v-for="(incident_type,key) in codes" v-show='!toggle' v-if="first" >
+						<button @click='toggle = !toggle'> Incident </button>
+						<li v-for="(incident_type,key) in codes" v-show='!toggle'  >
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
@@ -83,18 +95,7 @@
 						</li>
 					</ul>
 				</div>
-
-				<!-- <ul >
-						<li v-for="(incident_type,key) in codes" v-show='!toggle' >
-						  {{ incident_type}}
-						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
-						</li>
-						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
-								{{ neighborhood_name}}
-								<input type="checkbox" v-model="checked[key.substring(1)]"/>
-						</li>
-				</ul> -->
-					  <div style="clear:both;"></div>
+				<div style="clear:both;"></div>
 
 	
 		<!-- the table of data  -->
