@@ -56,19 +56,24 @@
 		<!-- the map  -->
 		<div id="mapid">
 		</div>
+		
 
 		<!-- check list  -->
 		<div id="app"> 
-				<ul>
-						<li v-for="(incident_type,key) in codes">
+				<div id="button">
+						<button @click='toggle = !toggle'> Filter Incidents and Neighborhood </button>
+				</div>
+
+				<ul >
+						<li v-for="(incident_type,key) in codes" v-show='toggle' >
 						  {{ incident_type}}
 						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-						<li v-for="(neighborhood_name,key) in neighborhoods">
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='toggle' >
 								{{ neighborhood_name}}
 								<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-					  </ul>
+				</ul>
 					  <span> Checked:{{checked}}</span>
 
 	
@@ -204,9 +209,13 @@
 					codes:{},
 					neighborhoods:{},
 					checked:{},
-					incidents:{}
+					incidents:{},
+					toggle: true
 				}
+				
 			});
+
+			
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
