@@ -22,6 +22,8 @@
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 
+	
+
 
 	
 </head>
@@ -32,10 +34,7 @@
 			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
-		
-		<div id = "Incidents">
-		</div>
-		<!-- the map  -->
+		<!-- the search bars  -->
 		<div id= "searchBox">
 				<p> Please input your Lan. and Long. infromation here </p>
 				<form>
@@ -52,51 +51,51 @@
 				<button onclick = "myfunct()"> Submit</button>
 		</div>
 
-
-		
 		
 		<!-- the map  -->
+		<div id="mapid"> </div>
 
-		<div id="mapid">
-		</div>
-		<div id= "date-picker"> </div>
-		<!-- check list  -->
+		<!-- Vue app  -->
 		<div id="app"> 
 				<div id="button">
 						<button @click='toggle = !toggle' id="first"> Filter  </button>
 						
 				</div>
-				<div v-show='!toggle'  id="app">
-						
+				<div v-show='!toggle' id="filters" >
+				
 					<ul >
+						<!-- time -->
+						<button @click='toggle = !toggle'> Time </button><br>
+						<label for="start">Start Time:</label>
+						<input type="number" min="0" max="23" placeholder="23">:
+						<input type="number" min="0" max="59" placeholder="00">:
+						<input type="number" min="0" max="59" placeholder="00"><br>
+						<label for="start"> End Time:</label>
+						<input type="number" min="0" max="23" placeholder="23">:
+						<input type="number" min="0" max="59" placeholder="00">:
+						<input type="number" min="0" max="59" placeholder="00"><br>
+						<!-- calendar -->
+						<button @click='toggle = !toggle'> Date </button><br>
+						<label for="start">Start Date:</label>
+						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-12-31"> <br>
+						<label for="start">End Date:</label>
+						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-12-31"><br>
 						<!-- checklist for incident -->
 						<button @click='toggle = !toggle'> Incident </button>
 						<li v-for="(incident_type,key) in codes" >
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
+
 						<!-- checklist for neighborhoods -->	
 						<button @click='toggle = !toggle'> Neighbirhoods</button>
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
 						{{ neighborhood_name}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-
-						
 					</ul>
 				</div>
-
-				<!-- <ul >
-						<li v-for="(incident_type,key) in codes" v-show='!toggle' >
-						  {{ incident_type}}
-						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
-						</li>
-						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
-								{{ neighborhood_name}}
-								<input type="checkbox" v-model="checked[key.substring(1)]"/>
-						</li>
-				</ul> -->
-					  <div style="clear:both;"></div>
+				<div style="clear:both;"></div>
 
 	
 		<!-- the table of data  -->
@@ -128,17 +127,14 @@
 				</tbody>
 			</table>
 		</div>
+
 		<script>
-			var exports = {};
+			
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 		<script src="https://unpkg.com/leaflet-drift-marker@1.0.3/lib/DriftMarker/Drift_Marker.js"></script>
 		<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
-		<script>
-			//import {Datepicker, Timepicker, DatetimePicker} from '@livelybone/vue-datepicker';
-
-		</script>
 
 
 <script>
@@ -303,7 +299,6 @@
 		
 		<script type="application/javascript">
 
-
 			var app = new Vue({
 				el:"#app",
 				data:{
@@ -314,52 +309,6 @@
 					toggle: true
 				}
 			});
-			
-			/*Vue.component('datepicker', Datepicker);
-
-			new Vue({
-				components:{Datepicker, Timepicker, DatetimePicker}
-				});
-			var popperProps = {
-				popperOptions: {
-				modifiers: {
-				preventOverflow: {
-				padding: 20
-				}
-				},
-				onUpdate: function (data) {
-				console.log(JSON.stringify(data.attributes))
-				}
-				}
-			}
-			/*	var datepicker = new Vue({
-					el: '#date-picker',
-					template: '<datepicker :value="date"' +
-					'                      @input="log"' +
-					'                      min="2014-08-14"' +
-					'                      max="2019-10-31"' +
-					'                      :dayStr="dayStr"' +
-					'                      :scrollbarProps="{isMobile: isM}"' +
-					'                      :popperProps="popperProps"/>',
-					data: function () {
-					return {
-					dayStr: ['7', '1', '2', '3', '4', '5', '6'],
-					date: '2019-10-01',
-					isM: isM,
-					popperProps: popperProps
-					}
-					},
-					methods: {
-					log: function (val) {
-					this.date = val
-					console.log(val)
-					}
-					},
-					components: { 'datepicker': VueDatepicker.Datepicker }
-				});
-				*/
-
-			
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
