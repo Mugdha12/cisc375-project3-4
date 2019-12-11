@@ -197,12 +197,6 @@
 		</script>	
 		<script type="application/javascript">
 
-			var firstTable = new Vue({
-				el:"#firstTable",
-				data:{
-					rows:{}
-				}
-			});
 
 			var app = new Vue({
 				el:"#app",
@@ -213,10 +207,7 @@
 					incidents:{}
 				}
 			});
-			// gets the data from the month Oct of 2019
-			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
-				firstTable.rows = data;
-			});
+			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;
