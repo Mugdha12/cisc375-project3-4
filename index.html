@@ -71,8 +71,8 @@
 						
 					<ul >
 						<!-- checklist for incident -->
-						<button @click='toggle = !toggle'> Incident </button>
-						<li v-for="(incident_type,key) in codes" v-show='!toggle'  >
+						<button @click='toggle = !toggle' id="first"> Incident </button>
+						<li  v-if="first" v-for="(incident_type,key) in codes" v-show='!toggle' v-if="first" >
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
@@ -83,7 +83,7 @@
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 
-						
+
 					</ul>
 				</div>
 
