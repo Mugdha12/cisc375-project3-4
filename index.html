@@ -59,8 +59,7 @@
 
 		<div id="mapid">
 		</div>
-		
-
+		<div id= "date-picker"> </div>
 		<!-- check list  -->
 		<div id="app"> 
 				<div id="button">
@@ -135,10 +134,11 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 		<script src="https://unpkg.com/leaflet-drift-marker@1.0.3/lib/DriftMarker/Drift_Marker.js"></script>
-			<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+		<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+		<script src="https://unpkg.com/@livelybone/vue-datepicker/lib/umd/<--module-->.js"></script>
 
-		<script>
-		
+
+<script>
 	 	// Script for adding marker on map click
 	 	
 				var lat = document.getElementById("lat").value;
@@ -310,6 +310,49 @@
 					toggle: true
 				}
 			});
+			import * as VueDatepicker from '@livelybone/vue-datepicker';
+			Vue.component('datepicker', Datepicker);
+
+			new Vue({
+				components:{Datepicker, Timepicker, DatetimePicker}
+				});
+			var popperProps = {
+				popperOptions: {
+				modifiers: {
+				preventOverflow: {
+				padding: 20
+				}
+				},
+				onUpdate: function (data) {
+				console.log(JSON.stringify(data.attributes))
+				}
+				}
+			}
+				var datepicker = new Vue({
+					el: '#date-picker',
+					template: '<datepicker :value="date"' +
+					'                      @input="log"' +
+					'                      min="2014-08-14"' +
+					'                      max="2019-10-31"' +
+					'                      :dayStr="dayStr"' +
+					'                      :scrollbarProps="{isMobile: isM}"' +
+					'                      :popperProps="popperProps"/>',
+					data: function () {
+					return {
+					dayStr: ['7', '1', '2', '3', '4', '5', '6'],
+					date: '2019-10-01',
+					isM: isM,
+					popperProps: popperProps
+					}
+					},
+					methods: {
+					log: function (val) {
+					this.date = val
+					console.log(val)
+					}
+					},
+					components: { 'datepicker': VueDatepicker.Datepicker }
+				});
 
 
 			

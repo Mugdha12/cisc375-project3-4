@@ -423,7 +423,7 @@ console.log(req.query);
                             reports[case_number] = innerObj;
                 }
             } 
-           if(!req.query.hasOwnProperty('limit') && !req.query.hasOwnProperty('id') && !req.query.hasOwnProperty('grid') && !req.query.hasOwnProperty('codes') && !req.query.hasOwnProperty('end_date') && req.query.hasOwnProperty('start_date'))
+           if(!req.query.hasOwnProperty('limit') && !req.query.hasOwnProperty('id') && !req.query.hasOwnProperty('grid') && !req.query.hasOwnProperty('codes') && !req.query.hasOwnProperty('end_date') && !req.query.hasOwnProperty('start_date'))
            {
             for(let i=0; i<10000; i++)
             {
