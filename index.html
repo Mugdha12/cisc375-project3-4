@@ -29,7 +29,7 @@
 	<body>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
-			 <p><a href="index.html">Data </a> |  	<a href="about.html">About Us</a></p>
+			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
 		
@@ -45,16 +45,16 @@
 						<input type="text" name="longitude" id = "lon" value = "-93.09">
 				</form>
 				<button onclick = "myfunct()"> Submit</button>
+				<form>
+						<p> Please enter your address<p>
+						<input type="text" name="adsress">
+				</form>
+				<button onclick = "myfunct()"> Submit</button>
 		</div>
 
 
-		<!-- the input that will have to be changed -->
-		<div id="input">
-			<form>
-					<p> Please enter your address<p>
-					<input type="text" name="adsress">
-			</form>
-		</div>
+		
+		
 		<!-- the map  -->
 
 		<div id="mapid">
@@ -64,19 +64,39 @@
 		<!-- check list  -->
 		<div id="app"> 
 				<div id="button">
-						<button @click='toggle = !toggle'> Filter Incidents and Neighborhood </button>
+						<button @click='toggle = !toggle' id="first"> Filter  </button>
+						
+				</div>
+				<div v-show='!toggle'  id="app">
+						
+					<ul >
+						<!-- checklist for incident -->
+						<button @click='toggle = !toggle'> Incident </button>
+						<li v-for="(incident_type,key) in codes" v-show='!toggle'  >
+						{{ incident_type}}
+						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						</li>
+						<!-- checklist for neighborhoods -->	
+						<button @click='toggle = !toggle'> Neighbirhoods</button>
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
+						{{ neighborhood_name}}
+						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						</li>
+
+						
+					</ul>
 				</div>
 
-				<ul >
-						<li v-for="(incident_type,key) in codes" v-show='toggle' >
+				<!-- <ul >
+						<li v-for="(incident_type,key) in codes" v-show='!toggle' >
 						  {{ incident_type}}
 						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='toggle' >
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
 								{{ neighborhood_name}}
 								<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-				</ul>
+				</ul> -->
 					  <div style="clear:both;"></div>
 
 	
@@ -289,8 +309,8 @@
 					incidents:{},
 					toggle: true
 				}
-				
 			});
+
 
 			
 			
