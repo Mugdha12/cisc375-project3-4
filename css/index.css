@@ -34,8 +34,19 @@ p{
 }
 
 #firstTable{float: left;}
-table{ border-collapse: collapse;}
-table, th, td { border: 1px solid black;}
+table{ border-collapse: collapse; font-size: 1.2vw;width: 100%;}
+table, th, td { border: 1px solid black; }
+th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color:#586BA6;
+	color: white;
+	padding-left: 12px;
+	padding-right: 12px;
+	
+  }
+  tr:nth-child(even){background-color:#A0C3D9;}
 
 
 /* For the about images */
