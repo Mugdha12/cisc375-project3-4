@@ -138,6 +138,25 @@
 
 <script>
 	 	// Script for adding marker on map click
+	var locations = [
+					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
+					["Greater East Side",44.979412,-93.027130],
+					["West Side",44.897965,-93.081430],
+					["Dayton's Bluff",44.951677,-93.060792],
+					["Payne/Phalen",44.982648,-93.066961],
+					["North End",44.982424,-93.117494],
+					["Thomas/Dale(Frogtown)",44.959133, -93.131401],
+					["Summit/University",44.950551,-93.136059],
+					["West Seventh",44.929653, -93.131413],
+					["Como", 44.980167,-93.141662],
+					["Hamline/Midway",44.963469,-93.158237],
+					["St. Anthony", 44.971234, -93.198223],
+					["Union Park", 44.946046, -93.200321],
+					["Macalester-Groveland", 44.930514, -93.182059],
+					["Highland", 44.917279, -93.159709],
+					["Summit Hill", 44.936637, -93.139830],
+					["Capitol River",44.957940, -93.103392]	
+				];
 	 	
 					
 				var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -168,6 +187,12 @@
                 ],
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
+				var popup = L.popup();
+				for (var i = 0; i < locations.length; i++) {
+					marker = new L.marker([locations[i][1],locations[i][2]])
+				.bindPopup(locations[i][0])
+				.addTo(mymap);
+				}
 				var popup = L.popup();
 				
 				function onMapClick(e) {
