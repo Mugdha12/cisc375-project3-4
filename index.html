@@ -29,18 +29,12 @@
 	<body>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
-			 <p><a href="index.html">Data </a> |  	<a href="about.html">About Us</a></p>
+			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
-		<!-- the input that will have to be changed -->
-		<div id="input">
-			<form>
-					 Please enter your address :
-					<input type="text" name="adsress">
-			</form>
-		</div>
+		
 		<div id = "Incidents">
-		</div>-->
+		</div>
 		<!-- the map  -->
 		<div id= "searchBox">
 				<p> Please input your Lan. and Long. infromation here </p>
@@ -51,28 +45,57 @@
 						<input type="text" name="longitude" id = "lon" value = "-93.09">
 				</form>
 				<button onclick = "myfunct()"> Submit</button>
+				<form>
+						<p> Please enter your address<p>
+						<input type="text" name="adsress">
+				</form>
+				<button onclick = "myfunct()"> Submit</button>
 		</div>
 
+
+		
+		
 		<!-- the map  -->
+
 		<div id="mapid">
 		</div>
 		<div id= "date-picker"> </div>
 		<!-- check list  -->
 		<div id="app"> 
 				<div id="button">
-						<button @click='toggle = !toggle'> Filter Incidents and Neighborhood </button>
+						<button @click='toggle = !toggle' id="first"> Filter  </button>
+						
+				</div>
+				<div v-show='!toggle'  id="app">
+						
+					<ul >
+						<!-- checklist for incident -->
+						<button @click='toggle = !toggle'> Incident </button>
+						<li v-for="(incident_type,key) in codes" v-show='!toggle'  >
+						{{ incident_type}}
+						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						</li>
+						<!-- checklist for neighborhoods -->	
+						<button @click='toggle = !toggle'> Neighbirhoods</button>
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
+						{{ neighborhood_name}}
+						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						</li>
+
+						
+					</ul>
 				</div>
 
-				<ul >
-						<li v-for="(incident_type,key) in codes" v-show='toggle' >
+				<!-- <ul >
+						<li v-for="(incident_type,key) in codes" v-show='!toggle' >
 						  {{ incident_type}}
 						  <input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='toggle' >
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
 								{{ neighborhood_name}}
 								<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
-				</ul>
+				</ul> -->
 					  <div style="clear:both;"></div>
 
 	
@@ -199,6 +222,80 @@
                 }
               });*/
 
+
+			  //coor. for neighboohoor
+			 
+						// name: "Conway/Battlecreek/Highwood"
+						// lat: 44.927682
+                        // lng: -93.026969
+                       
+						// name: "Greater East Side"
+						// lat: 44.979412
+                        // lng: -93.027130
+                        
+						// name: "West Side"
+						// lat: 44.897965
+                        // lng: -93.081430
+                        
+						// name: "Dayton's Bluff"
+						// lat: 44.951677
+						// lng: -93.060792,
+                        
+						// name: "Payne/Phalen"
+						// lat: 44.982648
+						// lng: -93.066961
+                       
+						// name: "North End"
+						// lat: 44.982424
+						// lng: -93.117494
+                        
+						// name: "Thomas/Dale(Frogtown)"
+						// lat: 44.959133
+						// lng: -93.131401
+                        
+						// name: "Summit/University"
+						// lat: 44.950551
+						// lng: -93.136059
+                        // selected: true
+				
+						// name: "West Seventh"
+						// lat: 44.929653
+						// lng: -93.131413
+                        
+						// name: "Como"
+						// lat: 44.980167
+						// lng: -93.141662
+                       
+						// name: "Hamline/Midway"
+						// lat: 44.963469
+						// lng: -93.158237
+                        
+						// name: "St. Anthony"
+						// lat: 44.971234
+						// lng: -93.198223
+                        
+						// name: "Union Park"
+						// lat: 44.946046
+						// lng: -93.200321
+                       
+						// name: "Macalester-Groveland"
+						// lat: 44.930514
+						// lng: -93.182059
+                        
+						// name: "Highland"
+						// lat: 44.917279
+						// lng: -93.159709
+                        
+				
+						// name: "Summit Hill"
+						// lat: 44.936637
+						// lng: -93.139830
+                        
+						// name: "Capitol River"
+						// lat: 44.957940
+						// lng: -93.103392
+                        
+
 		</script>	
 		<script type="application/javascript">
 
@@ -212,7 +309,6 @@
 					incidents:{},
 					toggle: true
 				}
-				
 			});
 			import * as VueDatepicker from '@livelybone/vue-datepicker';
 			Vue.component('datepicker', Datepicker);
@@ -257,6 +353,7 @@
 					},
 					components: { 'datepicker': VueDatepicker.Datepicker }
 				});
+
 
 			
 			
