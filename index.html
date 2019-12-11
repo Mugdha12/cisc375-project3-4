@@ -43,12 +43,11 @@
 						Longitude:<br>
 						<input type="text" name="longitude" id = "lon" value = "-93.09">
 				</form>
-				<button onclick = "myfunct()"> Submit</button>
+			
 				<form>
 						<p> Please enter your address<p>
 						<input type="text" name="adsress">
 				</form>
-				<button onclick = "myfunct()"> Submit</button>
 		</div>
 
 		
@@ -58,14 +57,14 @@
 		<!-- Vue app  -->
 		<div id="app"> 
 				<div id="button">
-						<button @click='toggle = !toggle' id="first"> Filter  </button>
+						<button @click='toggle-filter = !toggle-filter' id="first"> Filter  </button>
 						
 				</div>
 				<div v-show='!toggle' id="filters" >
 				
 					<ul >
 						<!-- time -->
-						<button @click='toggle = !toggle'> Time </button><br>
+						<button @click='toggle-time = !toggle-time'> Time </button><br>
 						<label for="start">Start Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
@@ -75,20 +74,20 @@
 						<input type="number" min="0" max="59" placeholder="00">:
 						<input type="number" min="0" max="59" placeholder="00"><br>
 						<!-- calendar -->
-						<button @click='toggle = !toggle'> Date </button><br>
+						<button @click='toggle-date = !toggle'> Date </button><br>
 						<label for="start">Start Date:</label>
-						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-12-31"> <br>
+						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-10-31"> <br>
 						<label for="start">End Date:</label>
-						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-12-31"><br>
+						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-10-31"><br>
 						<!-- checklist for incident -->
-						<button @click='toggle = !toggle'> Incident </button>
+						<button @click='toggle-incident = !toggle-incident'> Incident </button>
 						<li v-for="(incident_type,key) in codes" >
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 
 						<!-- checklist for neighborhoods -->	
-						<button @click='toggle = !toggle'> Neighbirhoods</button>
+						<button @click='toggle-neighborhood = !toggle-neighborhood'> Neighbirhoods</button>
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
 						{{ neighborhood_name}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
@@ -140,9 +139,7 @@
 <script>
 	 	// Script for adding marker on map click
 	 	
-				var lat = document.getElementById("lat").value;
-				var long = document.getElementById("lon").value;
-				
+					
 				var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 				osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 				osm = L.tileLayer(osmUrl, {
@@ -306,7 +303,11 @@
 					neighborhoods:{},
 					checked:{},
 					incidents:{},
-					toggle: true
+					"toggle-filter": true,
+					"toggle-time": true,
+					"toggle-date": true,
+					"toggle-incident": true,
+					"toggle-neighborhood": true
 				}
 			});
 			
