@@ -44,16 +44,10 @@
 		console.log(crime_api_url);
 	}
 </script>
-<body onload="Prompt()">
+<body>
    
 
-    <!-- Prompt -->
-    <div id="dialog-form">
-        <label for="name">URL for St. Paul Crime API:</label>
-        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
-    </div>
-    <!-- End: Prompt -->
-
+    <!-- 
 
 
 
@@ -64,7 +58,7 @@
 			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
-		<!-- the search bars  -->
+		the search bars  -->
 		<div id= "searchBox">
 				<p> Please input  Lan. and Long. below  </p>
 				<form>
@@ -240,7 +234,7 @@
 					toggleNeighbor:true
 				}
 			});
-
+			var secondChecked = {};
 			function addressIntoCoor(address){
 				var addr = document.getElementById("address").value;
 				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
@@ -259,12 +253,13 @@
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
 			});
+		
 			//get the data from neighborhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
 				for(let j in data)
 				{	
-					
+					secondChecked[data[j]] = true;
 				}
 			});
 			if(app.form.startDate.length > 0)
@@ -278,7 +273,12 @@
 		//	console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate, function(data){
 				app.incidents = data;
+				for(let k in data)
+				{	
+					secondChecked[data[k]]=true;
+				}
 			});
+			console.log(secondChecked);
 		</script>  
 </body>
 </html>
