@@ -159,11 +159,11 @@
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	
-				var mymap = L.map('mapid').setView([44.965272, -93.104732],12);
+				var mymap = L.map('mapid').setView([44.965272, -93.104732],13);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
-				minZoom:12,
+				minZoom:13,
 				center: [44.965272, -93.104732],
 				id: 'mapbox/streets-v11',
 				draggable: false,
@@ -179,11 +179,20 @@
 
 				//can't move it outside st.paul
 				var nWest = L.latLng(44.967595, -93.192643);
-				var sEast = L.latLng(44.932274, -93.011841);
+				var sEast = L.latLng(44.940768, -93.044095);
 				var myBounds = L.latLngBounds(nWest, sEast);
 				mymap.setMaxBounds(myBounds);	
 
 
+				//changing the address
+				function addressIntoCoor(){
+				var addr = document.getElementById("address").value;
+				console.log(address);
+				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+				$.getJSON(url)
+
+				}
+				
 				
 		</script>	
 		
@@ -208,15 +217,15 @@
 					toggleTime:true,
 					toggleDate:true,
 					toggleIncident:true,
-					toggleNeighbor:true
+					toggleNeighbor:true,
 				}
 			});
 			var secondChecked = {};
-			function addressIntoCoor(address){
-				var addr = document.getElementById("address").value;
-				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+			// function addressIntoCoor(address){
+			// 	var addr = document.getElementById("address").value;
+			// 	var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
 			
-			}
+			// }
 
 			function coorIntoAddress(lat, lng){
 				var lat = document.getElementById("lat").value;
