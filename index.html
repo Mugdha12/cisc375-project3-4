@@ -93,14 +93,14 @@
 						
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
-						<input type="checkbox"   v-model="checked[key.substring(1)]"/>
+						<input type="checkbox"   v-model="checked[key.substring(1)]" />
 						</li>
 
 						<!-- checklist for neighborhoods -->	
 						
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
-						<input type="checkbox"  v-model="checked[key.substring(1)]"/>
+						<input type="checkbox"  v-model="checked[key.substring(1)]" />
 						</li>
 					</ul>
 				</div>
@@ -112,6 +112,7 @@
 					<tr>
 						<th> Date</th>
 						<th> Time</th>
+						<th> Incident</th>
 						<th> Code</th>
 						<th> Incident</th>
 						<th> Police Grid</th>
@@ -121,10 +122,11 @@
 				</thead>
 				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime) ">  
+					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime)">  
 					<!---<td>{{row}}</td>--->
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
+						<td> {{key}}</td>
 						<td>{{row.code}}</td>
 						<td>{{row.incident}}</td>
 						<td>{{row.police_grid}}</td>
@@ -240,7 +242,6 @@
 				}
 
 				
-				
 		</script>	
 		
 		<script type="application/javascript">
@@ -266,27 +267,40 @@
 					toggleNeighbor:true,
 				}
 			});
-			var secondChecked = {};
-			
+
+			function coorIntoAddress(lat, lng){
+				var lat = document.getElementById("lat").value;
+				var lng = document.getElementById("lng").value;
+				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lng;
+			}
+			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods")])
+			.then(results => {
+				console.log("results");
+			});
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
-				for(let k in data)
+				let tmp = {};
+				for(let j in data)
 				{	
-					app.checked[k.substring(1)]=true;
+					tmp[parseInt(j.substring(1))] = true;
 				}
+				app.checked = tmp;
+			
 			});
 		
 			//get the data from neighborhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
+				let tmp = {};
 				for(let j in data)
 				{	
-					app.checked[j.substring(1)] = true;
+					tmp[parseInt(j.substring(1))] = true;
 				}
+				app.checked = tmp;
 			});
 			
-			//console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
+			//console.log("http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate + "&limit=100");
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				app.incidents = data;
 				
