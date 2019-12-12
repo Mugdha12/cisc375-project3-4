@@ -124,9 +124,9 @@
 						<th> Block</th>
 					</tr>
 				</thead>
-				<tbody >
+				<tbody v-if="button.filterCounter > 0">
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">
+					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">  
 					<!---<td>{{row}}</td>--->
 
 						<td>{{row.date}}</td>
@@ -137,6 +137,18 @@
 						<td>{{row.neighborhood_number}}</td>
 						<td>{{row.block}}</td>
 					</tr>
+				</tbody>
+				<tbody v-else>
+					<tr v-for="row in incidents">  
+						<!---<td>{{row}}</td>--->
+							<td>{{row.date}}</td>
+							<td>{{row.time}}</td>
+							<td>{{row.code}}</td>
+							<td>{{row.incident}}</td>
+							<td>{{row.police_grid}}</td>
+							<td>{{row.neighborhood_number}}</td>
+							<td>{{row.block}}</td>
+						</tr>
 				</tbody>
 			</table>
 		</div>
@@ -191,13 +203,7 @@
 				var nWest = L.latLng(44.967595, -93.192643);
 				var sEast = L.latLng(44.932274, -93.011841);
 				var myBounds = L.latLngBounds(nWest, sEast);
-				mymap.setMaxBounds(myBounds);
-			
-
-				
-
-
-				
+				mymap.setMaxBounds(myBounds);			
 				
 		</script>	
 		
