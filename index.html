@@ -37,21 +37,22 @@
 
 		<!-- the search bars  -->
 		<div id= "searchBox">
-				<p> Please input your Lan. and Long. infromation here </p>
+				<p> Please input  Lan. and Long. below  </p>
 				<form>
 						Latitude:<br>
-						<input type="text" name="latitude" id = "lat" value = "44.9"><br>
+						<input type="text" name="latitude" id = "lat" ><br> 
 						Longitude:<br>
-						<input type="text" name="longitude" id = "lon" value = "-93.09">
+						<input type="text" name="longitude" id = "lng" >
 				</form>
 			
 				<form>
 						<p> Please enter your address<p>
-						<input type="text" name="adsress">
+						<input type="text"  id="address">
+						<button onclick="addressIntoCoor()"> Enter </button>
 				</form>
 		</div>
 
-		
+
 		<!-- the map  -->
 		<div id="mapid"> </div>
 
@@ -72,14 +73,6 @@
 						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<!--<input type="number" min="0" max="23" placeholder="23">:
-						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00"><br>
-						<label for="start"> End Time:</label>
-						<input type="number" min="0" max="23" placeholder="23">:
-						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00">
-						</li>-->
 						<input type = "time" value="00:00:00" id="startTime"> <br>
 						<label for="end"> End Time:</label>
 						<input type = "time" value="23:59:00" id="endTime"> <br>
@@ -126,8 +119,9 @@
 				</thead>
 				<tbody v-if="button.filterCounter > 0">
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">  
+					<!-- <tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">   -->
 					<!---<td>{{row}}</td>--->
+					<tr v-for="row in incidents" v-if="checked[row.neighborhood_number]">   
 
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
@@ -192,7 +186,6 @@
 				}).addTo(mymap);
 
 				//names of the neighbooh in st. paul
-				var popup = L.popup();
 				for (var i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
 				.bindPopup(locations[i][0])
@@ -203,7 +196,9 @@
 				var nWest = L.latLng(44.967595, -93.192643);
 				var sEast = L.latLng(44.932274, -93.011841);
 				var myBounds = L.latLngBounds(nWest, sEast);
-				mymap.setMaxBounds(myBounds);			
+				mymap.setMaxBounds(myBounds);	
+
+
 				
 		</script>	
 		
@@ -224,6 +219,20 @@
 					toggleNeighbor:true
 				}
 			});
+
+			function addressIntoCoor(address){
+				var addr = document.getElementById("address").value;
+				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+			
+			}
+
+			function coorIntoAddress(lat, lng){
+				var lat = document.getElementById("lat").value;
+				var lng = document.getElementById("lng").value;
+				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+44.965272+"&lon="+-93.104732;
+			}
+
+			
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
