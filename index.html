@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Index Page</title>
+	<title>St. Paul Crime API </title>
  
 	<!-- this is the css of leaf let -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -21,29 +21,7 @@
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
-</head><script type="application/javascript">
-	function Prompt() {
-		$("#dialog-form").dialog({
-			autoOpen: true,
-			modal: true,
-			width: "360px",
-			buttons: {
-				"Ok": function() {
-					var prompt_input = $("#prompt_input");
-					Init(prompt_input.val());
-					$(this).dialog("close");
-				},
-				"Cancel": function() {
-					$(this).dialog("close");
-				}
-			}
-		});
-	}
-
-	function Init(crime_api_url) {
-		console.log(crime_api_url);
-	}
-</script>
+</head>
 <body>
    
 
@@ -96,9 +74,9 @@
 						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<input type = "time" value = "00:00:00" min="00:00:00" max = "23:59:59" v-model= "startTime"> <br>
+						<input type = "time"  min="00:00:00" max = "23:59:59" v-model= "startTime"> <br>
 						<label for="end"> End Time:</label>
-						<input type = "time" value = "23:59:59" min="00:00:00" max = "23:59:59" v-model="endTime"> <br>
+						<input type = "time"  min="00:00:00" max = "23:59:59" v-model="endTime"> <br>
 						</li>
 						<!-- calendar -->
 						
@@ -212,18 +190,16 @@
 		<script type="application/javascript">
 			//var i = 0;
 			//var counter = 0;
-			var startDate = "2019-10-01";
-			var endDate = "2019-10-31";
 			var app = new Vue({
 				el:"#app",
 				data:{
 					form:{
-						startDate:"",
-						endDate:""
+						startDate:"2019-10-01",
+						endDate:"2019-10-31"
 					},
 					codes:{},
-					startTime:"",
-					endTime:"",
+					startTime:"00:00:00",
+					endTime:"23:59:59",
 					neighborhoods:{},
 					checked:{},
 					incidents:{},
@@ -253,6 +229,10 @@
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
+				for(let k in data)
+				{	
+					app.checked[k.substring(1)]=true;
+				}
 			});
 		
 			//get the data from neighborhoods
@@ -265,12 +245,9 @@
 			});
 			
 		//	console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
-			$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate, function(data){
+			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				app.incidents = data;
-				for(let k in data)
-				{	
-					app.checked[k.substring(1)]=true;
-				}
+				
 			});
 
 			function dateChange()
