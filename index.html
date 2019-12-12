@@ -21,14 +21,43 @@
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
+</head><script type="application/javascript">
+	function Prompt() {
+		$("#dialog-form").dialog({
+			autoOpen: true,
+			modal: true,
+			width: "360px",
+			buttons: {
+				"Ok": function() {
+					var prompt_input = $("#prompt_input");
+					Init(prompt_input.val());
+					$(this).dialog("close");
+				},
+				"Cancel": function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
 
-	
+	function Init(crime_api_url) {
+		console.log(crime_api_url);
+	}
+</script>
+<body onload="Prompt()">
+   
+
+    <!-- Prompt -->
+    <div id="dialog-form">
+        <label for="name">URL for St. Paul Crime API:</label>
+        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
+    </div>
+    <!-- End: Prompt -->
 
 
-	
-</head>
 
-	<body>
+
+
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -208,6 +237,8 @@
 			var app = new Vue({
 				el:"#app",
 				data:{
+					startDate: "",
+					endDate:"",
 					codes:{},
 					neighborhoods:{},
 					checked:{},
@@ -259,5 +290,5 @@
 			
 				//console.log(hold);
 		</script>  
-	</body>
+</body>
 </html>
