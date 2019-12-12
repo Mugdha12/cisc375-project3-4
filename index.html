@@ -69,6 +69,7 @@
 						<button @click='toggleDate = !toggleDate'> Date </button>
 						<button @click='toggleIncident= !toggleIncident'> Incident </button>
 						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
+						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
@@ -105,9 +106,6 @@
 				</div>
 
 		
-				<!--<div style="clear:both;"></div>-->
-
-	
 		<!-- the table of data  -->
 		<table id='firstTable'>
 				<thead>
@@ -122,10 +120,8 @@
 					</tr>
 				</thead>
 				<tbody >
-					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
+					
 					<tr v-for="row in incidents" v-if="checked[row.neighborhood_number] || checked[row.code]">
-					<!---<td>{{row}}</td>--->
-
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
 						<td>{{row.code}}</td>
@@ -139,9 +135,6 @@
 		</div>
 	</div>
 
-		<script>
-			
-		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 
@@ -179,7 +172,7 @@
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
 
-				
+				//names of the neighbooh in st. paul
 				var popup = L.popup();
 				for (var i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
@@ -220,8 +213,7 @@
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
-				app.codes = data;
-				
+				app.codes = data;	
 			});
 			//get the data from neighbirhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
