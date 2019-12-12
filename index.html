@@ -29,6 +29,7 @@
 </head>
 
 	<body>
+	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
 			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
@@ -57,51 +58,59 @@
 		<!-- Vue app  -->
 		<div id="app"> 
 				<div id="button">
-					<button @click='toggleFilter = !toggleFilter' id="first"> Filter  </button>				
+					<button @click='toggleFilter = !toggleFilter; filterCounter =+ 1' id="first"> Filter  </button>				
 				</div>
 				<div v-show='!toggleFilter' id="filters" > 
 				
 					<ul >
 						<!-- time -->
 						
-						<button @click='toggleTime = !toggleTime'> Time </button><br>
+						<button @click='toggleTime = !toggleTime'> Time </button>
+						<button @click='toggleDate = !toggleDate'> Date </button>
+						<button @click='toggleIncident= !toggleIncident'> Incident </button>
+						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
+						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<input type="number" min="0" max="23" placeholder="23">:
+						<!--<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
 						<input type="number" min="0" max="59" placeholder="00"><br>
 						<label for="start"> End Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00"><br>
+						<input type="number" min="0" max="59" placeholder="00">
+						</li>-->
+						<input type = "time" value="00:00:00" id="startTime"> <br>
+						<label for="end"> End Time:</label>
+						<input type = "time" value="23:59:00" id="endTime"> <br>
+						<button @click="timeCounter=+1">Submit</button>
 						</li>
 						<!-- calendar -->
-						<button @click='toggleDate = !toggleDate'> Date </button><br>
+						
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
 						<input type="date"   value="2019-10-01" min="2014-08-14" max="2019-10-31" id="startDate" > <br>
-						<label for="start">End Date:</label>
+						<label for="end">End Date:</label>
 						<input type="date"  value="2019-10-31" min="2014-08-14" max="2019-10-31" id="endDate"><br>
 						<button @click="counter=+1">Submit</button>
 						</li>
 						<!-- checklist for incident -->
-						<button @click='toggleIncident= !toggleIncident'> Incident </button>
+						
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 
 						<!-- checklist for neighborhoods -->	
-						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
+						
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 					</ul>
 				</div>
-				<!--<div style="clear:both;"></div>-->
 
-	
+		
 		<!-- the table of data  -->
 		<table id='firstTable'>
 				<thead>
@@ -117,7 +126,7 @@
 				</thead>
 				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && row.date > startDate.value && (row.date <= endDate.value)">
+					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">
 					<!---<td>{{row}}</td>--->
 
 						<td>{{row.date}}</td>
@@ -131,10 +140,8 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
 
-		<script>
-			
-		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 
@@ -161,20 +168,36 @@
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	
-				var mymap = L.map('mapid').setView([44.965272, -93.104732],11);
+				var mymap = L.map('mapid').setView([44.965272, -93.104732],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
 				minZoom:12,
+				center: [44.965272, -93.104732],
 				id: 'mapbox/streets-v11',
+				draggable: false,
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
+
+				//names of the neighbooh in st. paul
 				var popup = L.popup();
 				for (var i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
 				.bindPopup(locations[i][0])
 				.addTo(mymap);
 				}
+
+				//can't move it outside st.paul
+				var nWest = L.latLng(44.967595, -93.192643);
+				var sEast = L.latLng(44.932274, -93.011841);
+				var myBounds = L.latLngBounds(nWest, sEast);
+				mymap.setMaxBounds(myBounds);
+			
+
+				
+
+
+				
 				
 		</script>	
 		
@@ -198,7 +221,7 @@
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
-				app.codes = data;
+				app.codes = data;	
 			});
 			//get the data from neighbirhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
