@@ -175,6 +175,7 @@
 				minZoom:12,
 				center: [44.965272, -93.104732],
 				id: 'mapbox/streets-v11',
+				draggable: false,
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
 
@@ -186,10 +187,15 @@
 				.addTo(mymap);
 				}
 
-				var nWest = L.latLng(44.985993, -93.194589);
-				var sEast = L.latLng(44.999312, -93.221310);
+				//can't move it outside st.paul
+				var nWest = L.latLng(44.967595, -93.192643);
+				var sEast = L.latLng(44.932274, -93.011841);
 				var myBounds = L.latLngBounds(nWest, sEast);
-				myMap.setMaxBounds(myBounds);
+				mymap.setMaxBounds(myBounds);
+			
+
+				
+
 
 				
 				
