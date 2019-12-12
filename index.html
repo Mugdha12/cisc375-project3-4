@@ -57,13 +57,15 @@
 		<!-- Vue app  -->
 		<div id="app"> 
 				<div id="button">
-					<button @click='toggle-filter = !toggle-filter' id="first"> Filter  </button>				
+					<button @click='toggleFilter = !toggleFilter' id="first"> Filter  </button>				
 				</div>
-				<div v-show='!toggle' id="filters" >
+				<div v-show='!toggleFilter' id="filters" > 
 				
 					<ul >
 						<!-- time -->
-						<button @click='toggle-time = !toggle-time'> Time </button><br>
+						
+						<button @click='toggleTime = !toggleTime'> Time </button><br>
+						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
@@ -72,29 +74,32 @@
 						<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
 						<input type="number" min="0" max="59" placeholder="00"><br>
+						</li>
 						<!-- calendar -->
-						<button @click='toggle-date = !toggle'> Date </button><br>
+						<button @click='toggleDate = !toggleDate'> Date </button><br>
+						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
 						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-10-31"> <br>
 						<label for="start">End Date:</label>
-						<input type="date" id="start" value="2018-07-22" min="2014-08-14" max="2019-10-31"><br>
+						<input type="date" id="end" value="2018-07-22" min="2014-08-14" max="2019-10-31"><br>
+						</li>
 						<!-- checklist for incident -->
-						<button @click='toggle-incident = !toggle-incident'> Incident </button>
-						<li v-for="(incident_type,key) in codes" >
+						<button @click='toggleIncident= !toggleIncident'> Incident </button>
+						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 
 						<!-- checklist for neighborhoods -->	
-						<button @click='toggle-neighborhood = !toggle-neighborhood'> Neighbirhoods</button>
-						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggle' >
+						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
+						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 					</ul>
+				
 				</div>
-		</div>
-				<div style="clear:both;"></div>
+				<!--<div style="clear:both;"></div>-->
 
 	
 		<!-- the table of data  -->
@@ -182,11 +187,11 @@
 					neighborhoods:{},
 					checked:{},
 					incidents:{},
-					"toggle-filter": true,
-					"toggle-time": true,
-					"toggle-date": true,
-					"toggle-incident": true,
-					"toggle-neighborhood": true
+					toggleFilter:true,
+					toggleTime:true,
+					toggleDate:true,
+					toggleIncident:true,
+					toggleNeighbor:true
 				}
 			});
 			
@@ -199,9 +204,7 @@
 				app.neighborhoods = data;
 			});
 			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
-				//console.log(data);
 				app.incidents = data;
-				//console.log(firstTable.rows);
 			});
 			
 		</script>  
