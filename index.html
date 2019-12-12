@@ -96,18 +96,17 @@
 						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<input type = "time" value="00:00:00" id="startTime"> <br>
+						<input type = "time" value = "00:00:00" min="00:00:00" max = "23:59:59" v-model= "startTime"> <br>
 						<label for="end"> End Time:</label>
-						<input type = "time" value="23:59:00" id="endTime"> <br>
-						<button @click="timeCounter=+1">Submit</button>
+						<input type = "time" value = "23:59:59" min="00:00:00" max = "23:59:59" v-model="endTime"> <br>
 						</li>
 						<!-- calendar -->
 						
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
-						<input type="date"   min="2014-08-14" max="2019-10-31" v-model= "form.startDate" > <br>
+						<input type="date"   min="2014-08-14" max="2019-10-31" v-model= "form.startDate" @change="dateChange"> <br>
 						<label for="end">End Date:</label>
-						<input type="date"   min="2014-08-14" max="2019-10-31" v-model="form.endDate"><br>
+						<input type="date"   min="2014-08-14" max="2019-10-31" v-model="form.endDate" @change="dateChange"><br>
 						</li>
 						<!-- checklist for incident -->
 						
@@ -141,7 +140,7 @@
 				</thead>
 				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) ">  
+					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime) ">  
 					<!---<td>{{row}}</td>--->
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
@@ -223,6 +222,8 @@
 						endDate:""
 					},
 					codes:{},
+					startTime:"",
+					endTime:"",
 					neighborhoods:{},
 					checked:{},
 					incidents:{},
@@ -259,26 +260,28 @@
 				app.neighborhoods = data;
 				for(let j in data)
 				{	
-					secondChecked[data[j]] = true;
+					app.checked[j.substring(1)] = true;
 				}
 			});
-			if(app.form.startDate.length > 0)
-			{
-				startDate = app.form.startDate;
-			}
-			if(app.form.endDate.length > 0)
-			{
-				endDate = app.form.endDate;
-			}
+			
 		//	console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate, function(data){
 				app.incidents = data;
 				for(let k in data)
 				{	
-					secondChecked[data[k]]=true;
+					app.checked[k.substring(1)]=true;
 				}
 			});
-			console.log(secondChecked);
+
+			function dateChange()
+			{
+				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+					app.incidents = data;
+				});
+
+			}
+			
+			console.log(app.checked);
 		</script>  
 </body>
 </html>
