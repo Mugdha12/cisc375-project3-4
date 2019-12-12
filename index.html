@@ -41,9 +41,12 @@
 				<p> Please input  Lan. and Long. below  </p>
 				<form>
 						Latitude:<br>
-						<input type="text" name="latitude" id="lat"><br> 
+						<input type="text" name="latitude" id="lat">
+						<br> 
+						
 						Longitude:<br>
 						<input type="text" name="longitude" id="lng">
+						<button onclick="updateMap()"> Enter </button>
 				</form>
 			
 				<form>
@@ -189,8 +192,6 @@
 				var addr = document.getElementById("address").value;
 				console.log(address);
 				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
-				$.getJSON(url)
-
 				}
 
 				// rough outline of st.paul 
@@ -229,12 +230,21 @@
 				mymap.on('dragged', function() {
 					getCenter();
 				});
+
+				function updateMap (){
+					var newLat = document.getElementById('lat').value;
+					var newLng = document.getElementById('lng').value;
+
+					mymap.panTo(new L.latLng(newLat,newLng));
+					L.marker([51.5, -0.09]);
+				}
+
+				
 				
 		</script>	
 		
 		<script type="application/javascript">
-			//var i = 0;
-			//var counter = 0;
+			
 			var app = new Vue({
 				el:"#app",
 				data:{
@@ -257,19 +267,6 @@
 				}
 			});
 			var secondChecked = {};
-			// function addressIntoCoor(address){
-			// 	var addr = document.getElementById("address").value;
-			// 	var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
-			
-			// }
-
-			function coorIntoAddress(lat, lng){
-				var lat = document.getElementById("lat").value;
-				var lng = document.getElementById("lng").value;
-				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lng;
-			}
-
-			
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
@@ -289,7 +286,7 @@
 				}
 			});
 			
-		//	console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
+			//console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				app.incidents = data;
 				
@@ -302,8 +299,6 @@
 				});
 
 			}
-			
-			console.log(app.checked);
 		</script>  
 </body>
 </html>
