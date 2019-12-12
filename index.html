@@ -25,7 +25,7 @@
 <body>
    
 
-    <!-- 
+    
 
 
 
@@ -36,14 +36,14 @@
 			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
-		the search bars  -->
+		<!-- the search bars  -->
 		<div id= "searchBox">
 				<p> Please input  Lan. and Long. below  </p>
 				<form>
 						Latitude:<br>
-						<input type="text" name="latitude" id = "lat" ><br> 
+						<input type="text" name="latitude" id="lat"><br> 
 						Longitude:<br>
-						<input type="text" name="longitude" id = "lng" >
+						<input type="text" name="longitude" id="lng">
 				</form>
 			
 				<form>
@@ -202,7 +202,33 @@
 					[44.987541, -93.206992],
 					[44.990698, -93.006492],
 				]).addTo(mymap);
+
+				function getCenter(){
+					var currentCenter = mymap.getCenter();
+					var bounds = mymap.getBounds();
+					var currentLat = currentCenter.lat;
+					var currentLng = currentCenter.lng;
+					updateText(currentLat,currentLng, bounds);
+					
+				}
+
+				function updateText(lat,lng,bounds){
+					var textinputLat = document.getElementById("lat");
+					var textinputLng = document.getElementById('lng');
+
+					textinputLat.value = lat;
+					textinputLng.value = lng;
+				}
 				
+				// get the coor after it stop zooming 
+				mymap.on('zoomend', function() {
+						getCenter();
+				});
+
+				//get the coor after it's stop dragged 
+				mymap.on('dragged', function() {
+					getCenter();
+				});
 				
 		</script>	
 		
