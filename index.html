@@ -144,7 +144,7 @@
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
 					["Greater East Side",44.979412,-93.027130],
-					["West Side",44.897965,-93.081430],
+					["West Side",44.928185, -93.092870],
 					["Dayton's Bluff",44.951677,-93.060792],
 					["Payne/Phalen",44.982648,-93.066961],
 					["North End",44.982424,-93.117494],
@@ -154,18 +154,18 @@
 					["Como", 44.980167,-93.141662],
 					["Hamline/Midway",44.963469,-93.158237],
 					["St. Anthony", 44.971234, -93.198223],
-					["Union Park", 44.946046, -93.200321],
+					["Union Park", 44.948230, -93.189333],
 					["Macalester-Groveland", 44.930514, -93.182059],
 					["Highland", 44.917279, -93.159709],
 					["Summit Hill", 44.936637, -93.139830],
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	
-				var mymap = L.map('mapid').setView([44.965272, -93.104732],13);
+				var mymap = L.map('mapid').setView([44.965272, -93.104732],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
-				minZoom:13,
+				minZoom:12,
 				center: [44.965272, -93.104732],
 				id: 'mapbox/streets-v11',
 				draggable: false,
@@ -192,6 +192,16 @@
 				console.log(address);
 				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
 				}
+
+				// rough outline of st.paul 
+				var polygon = L.polygon([
+					[44.890754, -93.003751],
+					[44.921335, -93.048377],
+					[44.919512, -93.130088],
+					[44.888386, -93.177123],
+					[44.987541, -93.206992],
+					[44.990698, -93.006492],
+				]).addTo(mymap);
 				
 		</script>	
 		
