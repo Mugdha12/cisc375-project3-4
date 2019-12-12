@@ -89,23 +89,22 @@
 						
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
-						<input type="date"   value="2019-10-01" min="2014-08-14" max="2019-10-31" id="startDate" > <br>
+						<input type="date"   min="2014-08-14" max="2019-10-31" v-model= "form.startDate" > <br>
 						<label for="end">End Date:</label>
-						<input type="date"  value="2019-10-31" min="2014-08-14" max="2019-10-31" id="endDate"><br>
-						<button @click="counter=+1">Submit</button>
+						<input type="date"   min="2014-08-14" max="2019-10-31" v-model="form.endDate"><br>
 						</li>
 						<!-- checklist for incident -->
 						
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
-						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						<input type="checkbox"   v-model="checked[key.substring(1)]"/>
 						</li>
 
 						<!-- checklist for neighborhoods -->	
 						
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
-						<input type="checkbox" v-model="checked[key.substring(1)]"/>
+						<input type="checkbox"  v-model="checked[key.substring(1)]"/>
 						</li>
 					</ul>
 				</div>
@@ -124,11 +123,10 @@
 						<th> Block</th>
 					</tr>
 				</thead>
-				<tbody v-if="button.filterCounter > 0">
+				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.date > startDate.value && (row.date < endDate.value)) && (row.time > startTime.value && row.time < endTime.value)">  
+					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) ">  
 					<!---<td>{{row}}</td>--->
-
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
 						<td>{{row.code}}</td>
@@ -137,19 +135,7 @@
 						<td>{{row.neighborhood_number}}</td>
 						<td>{{row.block}}</td>
 					</tr>
-				</tbody>
-				<tbody v-else>
-					<tr v-for="row in incidents">  
-						<!---<td>{{row}}</td>--->
-							<td>{{row.date}}</td>
-							<td>{{row.time}}</td>
-							<td>{{row.code}}</td>
-							<td>{{row.incident}}</td>
-							<td>{{row.police_grid}}</td>
-							<td>{{row.neighborhood_number}}</td>
-							<td>{{row.block}}</td>
-						</tr>
-				</tbody>
+				</tbody>	
 			</table>
 		</div>
 	</div>
@@ -210,14 +196,21 @@
 		<script type="application/javascript">
 			//var i = 0;
 			//var counter = 0;
+			var startDate = "2019-10-01";
+			var endDate = "2019-10-31";
 			var app = new Vue({
 				el:"#app",
 				data:{
+					form:{
+						startDate:"",
+						endDate:""
+					},
 					codes:{},
 					neighborhoods:{},
 					checked:{},
 					incidents:{},
 					toggleFilter:true,
+					filterCounter:0,
 					toggleTime:true,
 					toggleDate:true,
 					toggleIncident:true,
@@ -229,26 +222,26 @@
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
 			});
-			//get the data from neighbirhoods
+			//get the data from neighborhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
+				for(let j in data)
+				{	
+					
+				}
 			});
-			//console.log(hold);
-			//console.log(app.startDate);
-			if(app.counter > 1)
+			if(app.form.startDate.length > 0)
 			{
-				$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate.value+ "&end_date=" + endDate.value, function(data){
-					app.incidents = data;
-				});
+				startDate = app.form.startDate;
 			}
-			else
+			if(app.form.endDate.length > 0)
 			{
-				$.getJSON( "http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-31", function(data){
-					app.incidents = data;
-				});
+				endDate = app.form.endDate;
 			}
-			
-				//console.log(hold);
+		//	console.log("http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate);
+			$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate + "&end_date=" + endDate, function(data){
+				app.incidents = data;
+			});
 		</script>  
 	</body>
 </html>
