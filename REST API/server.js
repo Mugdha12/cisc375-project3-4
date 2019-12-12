@@ -166,8 +166,12 @@ app.get('/incidents',(req, res) => {
             var commaStartDate = req.query.start_date;
             var commaEndDate = req.query.end_date;
                let loc = 0;
-              
-                for(let i=0; i< data.length; i++)
+               var n= data.length;
+              if(req.query.hasOwnProperty ('limit'))
+              {
+                  n = Number(req.query.limit);
+              }
+                for(let i=0; i< n; i++)
                 {
                      hold = data[i]["date_time"];
                      pos = hold.indexOf("T");
@@ -179,7 +183,7 @@ app.get('/incidents',(req, res) => {
                 }
                 let locEnd = 0;
            
-                for(let i=0; i< data.length; i++)
+                for(let i=0; i< n; i++)
                 {
                    hold = data[i]["date_time"];
                     pos = hold.indexOf("T");
@@ -401,10 +405,10 @@ app.get('/incidents',(req, res) => {
     
             }
 
-             if(req.query.hasOwnProperty('limit')){
+            if(req.query.hasOwnProperty('limit') && !req.query.hasOwnProperty('end_date') && !req.query.hasOwnProperty('start_date')){
                 var thelimit = req.query.limit;
                 
-                for(let i=0; i< Number(limit); i++){
+                for(let i=0; i< Number(thelimit); i++){
                             let innerObj = {};
                             case_number = "I" + data[i]["case_number"];
                             let hold = data[i]["date_time"];
