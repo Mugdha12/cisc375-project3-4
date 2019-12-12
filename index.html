@@ -21,14 +21,43 @@
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
+</head><script type="application/javascript">
+	function Prompt() {
+		$("#dialog-form").dialog({
+			autoOpen: true,
+			modal: true,
+			width: "360px",
+			buttons: {
+				"Ok": function() {
+					var prompt_input = $("#prompt_input");
+					Init(prompt_input.val());
+					$(this).dialog("close");
+				},
+				"Cancel": function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
 
-	
+	function Init(crime_api_url) {
+		console.log(crime_api_url);
+	}
+</script>
+<body onload="Prompt()">
+   
+
+    <!-- Prompt -->
+    <div id="dialog-form">
+        <label for="name">URL for St. Paul Crime API:</label>
+        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
+    </div>
+    <!-- End: Prompt -->
 
 
-	
-</head>
 
-	<body>
+
+
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -37,21 +66,22 @@
 
 		<!-- the search bars  -->
 		<div id= "searchBox">
-				<p> Please input your Lan. and Long. infromation here </p>
+				<p> Please input  Lan. and Long. below  </p>
 				<form>
 						Latitude:<br>
-						<input type="text" name="latitude" id = "lat" value = "44.9"><br>
+						<input type="text" name="latitude" id = "lat" ><br> 
 						Longitude:<br>
-						<input type="text" name="longitude" id = "lon" value = "-93.09">
+						<input type="text" name="longitude" id = "lng" >
 				</form>
 			
 				<form>
 						<p> Please enter your address<p>
-						<input type="text" name="adsress">
+						<input type="text"  id="address">
+						<button onclick="addressIntoCoor()"> Enter </button>
 				</form>
 		</div>
 
-		
+
 		<!-- the map  -->
 		<div id="mapid"> </div>
 
@@ -72,14 +102,6 @@
 						
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<!--<input type="number" min="0" max="23" placeholder="23">:
-						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00"><br>
-						<label for="start"> End Time:</label>
-						<input type="number" min="0" max="23" placeholder="23">:
-						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00">
-						</li>-->
 						<input type = "time" value="00:00:00" id="startTime"> <br>
 						<label for="end"> End Time:</label>
 						<input type = "time" value="23:59:00" id="endTime"> <br>
@@ -178,7 +200,6 @@
 				}).addTo(mymap);
 
 				//names of the neighbooh in st. paul
-				var popup = L.popup();
 				for (var i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
 				.bindPopup(locations[i][0])
@@ -189,7 +210,9 @@
 				var nWest = L.latLng(44.967595, -93.192643);
 				var sEast = L.latLng(44.932274, -93.011841);
 				var myBounds = L.latLngBounds(nWest, sEast);
-				mymap.setMaxBounds(myBounds);			
+				mymap.setMaxBounds(myBounds);	
+
+
 				
 		</script>	
 		
@@ -217,6 +240,20 @@
 					toggleNeighbor:true
 				}
 			});
+
+			function addressIntoCoor(address){
+				var addr = document.getElementById("address").value;
+				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+			
+			}
+
+			function coorIntoAddress(lat, lng){
+				var lat = document.getElementById("lat").value;
+				var lng = document.getElementById("lng").value;
+				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+44.965272+"&lon="+-93.104732;
+			}
+
+			
 			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
@@ -243,5 +280,5 @@
 				app.incidents = data;
 			});
 		</script>  
-	</body>
+</body>
 </html>
