@@ -79,9 +79,10 @@
 						<button @click='toggleDate = !toggleDate'> Date </button><br>
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
-						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-10-31"> <br>
+						<input type="date"   value="2019-10-01" min="2014-08-14" max="2019-10-31" id="startDate" > <br>
 						<label for="start">End Date:</label>
-						<input type="date" id="end" value="2018-07-22" min="2014-08-14" max="2019-10-31"><br>
+						<input type="date"  value="2019-10-31" min="2014-08-14" max="2019-10-31" id="endDate"><br>
+						<button @click="counter=+1">Submit</button>
 						</li>
 						<!-- checklist for incident -->
 						<button @click='toggleIncident= !toggleIncident'> Incident </button>
@@ -97,7 +98,6 @@
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 					</ul>
-				
 				</div>
 				<!--<div style="clear:both;"></div>-->
 
@@ -117,7 +117,7 @@
 				</thead>
 				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="row in incidents" v-if="checked[row.neighborhood_number] || checked[row.code]">
+					<tr v-for="row in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && row.date > startDate.value && (row.date <= endDate.value)">
 					<!---<td>{{row}}</td>--->
 
 						<td>{{row.date}}</td>
@@ -179,7 +179,8 @@
 		</script>	
 		
 		<script type="application/javascript">
-
+			//var i = 0;
+			//var counter = 0;
 			var app = new Vue({
 				el:"#app",
 				data:{
@@ -203,10 +204,22 @@
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
 			});
-			$.getJSON("http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-30", function(data){
-				app.incidents = data;
-			});
+			//console.log(hold);
+			//console.log(app.startDate);
+			if(app.counter > 1)
+			{
+				$.getJSON( "http://localhost:8000/incidents?start_date=" + startDate.value+ "&end_date=" + endDate.value, function(data){
+					app.incidents = data;
+				});
+			}
+			else
+			{
+				$.getJSON( "http://localhost:8000/incidents?start_date=2019-10-01&end_date=2019-10-31", function(data){
+					app.incidents = data;
+				});
+			}
 			
+				//console.log(hold);
 		</script>  
 	</body>
 </html>

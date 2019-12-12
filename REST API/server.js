@@ -157,14 +157,12 @@ app.get('/incidents',(req, res) => {
     var arrayofGrids;
     var hold;
     var pos;
-console.log(req.query);
     db.all("SELECT * FROM Incidents ORDER BY date_time DESC", (err,data) => {
        if(err){
            console.log("Error accessing the tables");
        }else {
            if( req.query.hasOwnProperty('start_date') && req.query.hasOwnProperty('end_date'))
            {
-               console.log("inhere");
             var commaStartDate = req.query.start_date;
             var commaEndDate = req.query.end_date;
                let loc = 0;
@@ -176,7 +174,6 @@ console.log(req.query);
                     date = hold.substring(0,pos);
                     if(commaStartDate === date)
                     {
-                        console.log(date);
                         loc=i;
                     }
                 }
@@ -236,7 +233,7 @@ console.log(req.query);
                         startPoint = loc-10000;
                     }
                 
-                    console.log('start only ' + loc);
+                   // console.log('start only ' + loc);
                     for (let i = endPoint; i < loc + 1; i++)
                     {
                             let innerObj = {};
@@ -379,7 +376,7 @@ console.log(req.query);
                 {
                     arrayofNeighborhood = commaNeighbor.split(',');
                 }
-                console.log(commaNeighbor);
+                //console.log(commaNeighbor);
                 for (let j =0; j<arrayofNeighborhood.length; j++){
                     for(let i=0; i< data.length; i++){
                         if(Number(arrayofNeighborhood[j]) === Number(data[i]["neighborhood_number"]))
