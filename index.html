@@ -29,6 +29,7 @@
 </head>
 
 	<body>
+	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
 			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
@@ -64,7 +65,10 @@
 					<ul >
 						<!-- time -->
 						
-						<button @click='toggleTime = !toggleTime'> Time </button><br>
+						<button @click='toggleTime = !toggleTime'> Time </button>
+						<button @click='toggleDate = !toggleDate'> Date </button>
+						<button @click='toggleIncident= !toggleIncident'> Incident </button>
+						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
@@ -73,25 +77,25 @@
 						<label for="start"> End Time:</label>
 						<input type="number" min="0" max="23" placeholder="23">:
 						<input type="number" min="0" max="59" placeholder="00">:
-						<input type="number" min="0" max="59" placeholder="00"><br>
+						<input type="number" min="0" max="59" placeholder="00">
 						</li>
 						<!-- calendar -->
-						<button @click='toggleDate = !toggleDate'> Date </button><br>
+						
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
 						<input type="date" id="start"  value="2018-07-22" min="2014-08-14" max="2019-10-31"> <br>
 						<label for="start">End Date:</label>
-						<input type="date" id="end" value="2018-07-22" min="2014-08-14" max="2019-10-31"><br>
+						<input type="date" id="end" value="2018-07-22" min="2014-08-14" max="2019-10-31">
 						</li>
 						<!-- checklist for incident -->
-						<button @click='toggleIncident= !toggleIncident'> Incident </button>
+						
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
 						</li>
 
 						<!-- checklist for neighborhoods -->	
-						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
+						
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
 						<input type="checkbox" v-model="checked[key.substring(1)]"/>
@@ -99,6 +103,8 @@
 					</ul>
 				
 				</div>
+
+		
 				<!--<div style="clear:both;"></div>-->
 
 	
@@ -131,6 +137,7 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
 
 		<script>
 			
@@ -161,20 +168,30 @@
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	
-				var mymap = L.map('mapid').setView([44.965272, -93.104732],11);
+				var mymap = L.map('mapid').setView([44.965272, -93.104732],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
 				minZoom:12,
+				center: [44.965272, -93.104732],
 				id: 'mapbox/streets-v11',
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
+
+				
 				var popup = L.popup();
 				for (var i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
 				.bindPopup(locations[i][0])
 				.addTo(mymap);
 				}
+
+				var nWest = L.latLng(44.988269, -93.207270);
+				var sEast = L.latLng(44.99564, -93.229122);
+				var myBounds = L.latLngBounds(nWest, sEast);
+				myMap.setMaxBounds(myBounds);
+
+				
 				
 		</script>	
 		
@@ -198,6 +215,7 @@
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;
+				
 			});
 			//get the data from neighbirhoods
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
