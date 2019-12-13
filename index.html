@@ -172,8 +172,8 @@
 				var mymap = L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-				maxZoom: 18,
-				minZoom:13,
+				maxZoom: 17,
+				minZoom:12,
 				center: [searchBox.lat, searchBox.lng],
 				id: 'mapbox/streets-v11',
 				draggable: false,
@@ -242,18 +242,9 @@
 					var currentCenter = mymap.getCenter();
 					var bounds = mymap.getBounds();
 					searchBox.lat = currentCenter.lat;
-					searchBox.lng = currentCenter.lng;
-					// updateText(currentLat,currentLng, bounds);
-					
+					searchBox.lng = currentCenter.lng;					
 				}
 
-				function updateText(lat,lng,bounds){
-					// var textinputLat = document.getElementById("lat");
-					// var textinputLng = document.getElementById('lng');
-
-					// textinputLat.value = lat;
-					// textinputLng.value = lng;
-				}
 				let popup = L.popup();
 				mymap.on('click',function(e){
 					popup.setLatLng(e.latlng).setContent("You have clicked on the map at" + e.latlng.toString()).openOn(mymap);
@@ -268,13 +259,14 @@
 					getCenter();
 				});
 				
-
+				//searck lat.lng works - puts markers
 				function updateMap (){
-					mymap.panTo(new L.latLng([searchBox.lat,searchBox.lng]));
-					L.marker([51.5, -0.09]);
+					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
+					marker = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap)
+					.bindPopup("Lat = " + searchBox.lat + "<br /> Lng = "+ searchBox.lng);
 				}
-				
-				//updateMap();
+
+			
 				
 		</script>	
 		
