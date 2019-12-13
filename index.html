@@ -171,8 +171,8 @@
 					toogleAdd:true
 				}
 			});
-			var newIcon = L.icon({iconUrl: 'images/location-pin.svg', iconSize: [40,40]});
-			var addressMarker = L.icon({iconUrl: 'images/home.svg', iconSize: [30,30]});
+			var newIcon = L.icon({iconUrl: "images/location-pin.svg", iconSize: [40,40]});
+			var addressMarker = L.icon({iconUrl: "images/home.svg", iconSize: [40,40]});
 			var marker;
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
@@ -197,14 +197,12 @@
 				 var mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
 
 				 var popup = L.popup();
-				 var curl;
+				 var polygon;
 					function Init(crimeAPIURL)
 					{
-						curl = crimeAPIURL;
 						createMap();
 						createMarkers();
 						createTable();
-						
 					}
 					function createMap()
 					{
@@ -221,7 +219,7 @@
 						var sEast = L.latLng(44.940768, -93.044095);
 						var myBounds = L.latLngBounds(nWest, sEast);
 						mymap.setMaxBounds(myBounds);	
-						var polygon = L.polygon([
+						 polygon = L.polygon([
 							[44.890754, -93.003751],
 							[44.921335, -93.048377],
 							[44.919512, -93.130088],
@@ -255,7 +253,10 @@
 				}
 
 				function coorIntoAddress(){
-					//if(search.lat >= 44.940768 && search.lat )
+					if( mymap.polygon.contains([searchBox.lat,searchBox.lng]) == false){
+						console.log("WRONG BITCHE")
+					}
+
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
 				$.getJSON(url, function(data){
 						searchBox.address = "";
@@ -264,6 +265,7 @@
 							searchBox.address = data["address"]["house_number"];
 						}
 						searchBox.address = searchBox.address +  " " + data["address"]["road"];
+						
 					});
 					//console.log(searchBox.address);
 					updateMap();
@@ -291,8 +293,6 @@
 			
 
 				//get the search input to change when the map is being moved 
-
-	
 				function getCenter(){
 					var currentCenter = mymap.getCenter();
 					var bounds = mymap.getBounds();
@@ -340,7 +340,6 @@
 						mymap.removeLayer(mark);
 					};
 				}
-
 				//searck lat.lng works - puts markers
 				function updateMap (){
 					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
@@ -378,7 +377,7 @@
 				
 			});
 			var promise1 = new Promise ((resolve, reject) => {
-				$.getJSON(curl + "/codes", function(data){
+				$.getJSON("http://localhost:8000/codes", function(data){
 				
 					resolve(data);
 			})
@@ -386,12 +385,12 @@
 		
 			//get the data from neighborhoods
 			var promise2 = new Promise ((resolve, reject) => {
-			$.getJSON(curl + "/neighborhoods", function(data){
+			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				resolve(data);
 			})
 			});
 			var promise3 = new Promise ((resolve, reject) => {
-			$.getJSON( curl + "/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				
 				resolve(data);
 			})
@@ -437,7 +436,7 @@
 			}
 			function dateChange()
 			{
-				$.getJSON( curl + "/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 					app.incidents = data;
 					populateIncidents();
 				});
