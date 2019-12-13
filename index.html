@@ -172,6 +172,7 @@
 				}
 			});
 			var newIcon = L.icon({iconUrl: 'location-pin.svg', iconSize: [40,40]});
+			var addressMarker = L.icon({iconUrl: 'home.svg', iconSize: [40,40]});
 			var marker;
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
@@ -194,6 +195,7 @@
 				];
 	 	// Script for adding marker on map click
 				 var mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
+
 				 var popup = L.popup();
 					function Init(crimeAPIURL)
 					{
@@ -203,7 +205,6 @@
 					}
 					function createMap()
 					{
-						//mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
 						L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 						attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 						maxZoom: 17,
@@ -314,16 +315,6 @@
 
 				function randFunct(data)
 				{
-					/*var message = "";
-					
-					searchBox.address = data.block;
-					addressIntoCoor();
-					var mark = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
-					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button onclick = 'deleteMarker(mark)'> Delete </button>";
-					mark.bindPopup(message);
-        			mark.on('mouseover', function (e) {
-            		this.openPopup();
-        			});*/
 					var markerEl = document.createElement("div");
 					var markerTitle = document.createElement("p");
 					var markerButton = document.createElement("button");
@@ -335,7 +326,7 @@
 					markerEl.appendChild(markerButton);
 					searchBox.address = data.block;
 					addressIntoCoor();
-					var mark = new L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
+					var mark = new L.marker([searchBox.lat, searchBox.lng],{icon: addressMarker}).addTo(mymap);
 					mark.bindPopup(markerEl);
 					mark.on('mouseover', function(e){
 						this.openPopup();
