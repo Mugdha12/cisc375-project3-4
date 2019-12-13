@@ -25,11 +25,6 @@
 <body>
    
 
-    
-
-
-
-
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -39,12 +34,12 @@
 		<!-- the search bars  -->
 		<div id= "searchBox">
 				
-						<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button>
+						<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
 						<div v-show="!toogleLatLog"> 
 						<p> Please input  Lan. and Long. below  </p>
 						<input type="number" v-model="lat">
 						<input type="number"  v-model="lng">
-						<button onclick="coorIntoAddress()"> Enter </button>
+						<button onclick="coorIntoAddress(); updateMap()"> Enter </button>
 					</div>
 
 						<button @click='toogleAdd=!toogleAdd'>Address</button>
@@ -152,6 +147,7 @@
 					toogleAdd:true
 				}
 			});
+			var newIcon = L.icon({iconUrl: 'location-pin.svg', iconSize: [40,40]});
 			
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
@@ -219,7 +215,7 @@
 					}
 					for (let i = 0; i < locations.length; i++) {
 						marker = new L.marker([locations[i][1],locations[i][2]])
-						.bindPopup(locations[i][0] + ":" + numIncidents[i+1])
+						.bindPopup(locations[i][0] + ": <br /> Crime Number:" + numIncidents[i+1])
 						.addTo(mymap);
 					}
 
@@ -240,16 +236,16 @@
 					var bounds = mymap.getBounds();
 					var currentLat = currentCenter.lat;
 					var currentLng = currentCenter.lng;
-					//updateText(currentLat,currentLng, bounds);
+					// updateText(currentLat,currentLng, bounds);
 					
 				}
 
 				function updateText(lat,lng,bounds){
-				//	var textinputLat = document.getElementById("lat");
-				//	var textinputLng = document.getElementById('lng');
+					// var textinputLat = document.getElementById("lat");
+					// var textinputLng = document.getElementById('lng');
 
-				//	textinputLat.value = lat;
-				//	textinputLng.value = lng;
+					// textinputLat.value = lat;
+					// textinputLng.value = lng;
 				}
 				let popup = L.popup();
 				mymap.on('clicked',function(e){
