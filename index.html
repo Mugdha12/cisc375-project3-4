@@ -295,6 +295,7 @@
 			});
 			
 			
+			
 			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods"), $.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate)])
 			.then(
 
