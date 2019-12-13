@@ -196,15 +196,22 @@
 					//console.log(url);
 					$.getJSON(url, function(data){
 						searchBox.lat = data[0]["lat"];
-						searchBox.lng = data[0]["lng"];
+						//console.log(data[0]["lon"]);
+						searchBox.lng = data[0]["lon"];
 					});
 					updateMap();
 				}
 				function coorIntoAddress(){
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
 				$.getJSON(url, function(data){
-						console.log(data["address"]["house_number"] + " " + data["address"]["road"] );
+						searchBox.address = "";
+						if(data["address"]["house_number"] != null)
+						{
+							searchBox.address = data["address"]["house_number"];
+						}
+						searchBox.address = searchBox.address +  " " + data["address"]["road"];
 					});
+					console.log(searchBox.address);
 					updateMap();
 				}
 				function populateIncidents(data)
@@ -234,8 +241,8 @@
 				function getCenter(){
 					var currentCenter = mymap.getCenter();
 					var bounds = mymap.getBounds();
-					var currentLat = currentCenter.lat;
-					var currentLng = currentCenter.lng;
+					searchBox.lat = currentCenter.lat;
+					searchBox.lng = currentCenter.lng;
 					// updateText(currentLat,currentLng, bounds);
 					
 				}
@@ -248,7 +255,7 @@
 					// textinputLng.value = lng;
 				}
 				let popup = L.popup();
-				mymap.on('clicked',function(e){
+				mymap.on('click',function(e){
 					popup.setLatLng(e.latlng).setContent("You have clicked on the map at" + e.latlng.toString()).openOn(mymap);
 				});
 				// get the coor after it stop zooming 
