@@ -238,13 +238,16 @@
 					[44.990698, -93.006492],
 				]).addTo(mymap);
 
+				//get the search input to change when the map is being moved 
+
+	
 				function getCenter(){
 					var currentCenter = mymap.getCenter();
 					var bounds = mymap.getBounds();
 					searchBox.lat = currentCenter.lat;
 					searchBox.lng = currentCenter.lng;					
 				}
-
+				// when clicked it give you the coor.lat/lng
 				let popup = L.popup();
 				mymap.on('click',function(e){
 					popup.setLatLng(e.latlng).setContent("You have clicked on the map at" + e.latlng.toString()).openOn(mymap);
@@ -315,7 +318,7 @@
 				},
 				
 			});
-			console.log(data.incident);
+			
 
 
 
@@ -324,8 +327,10 @@
 				//personal crime
 				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assualt') || lowCrimeName.includes('norcotics')){
 					return "personl";
+					//violent crme
 				}else if(lowCrimeName.includes('murder') || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon')){
 					return "violent";
+					//personal
 				}else if(lowCrimeName.includes('theft') || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property')){
 					return "property"
 				}else{
