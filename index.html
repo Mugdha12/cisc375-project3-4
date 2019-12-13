@@ -55,7 +55,8 @@
 
 
 		<!-- the map  -->
-		<div id="mapid"> </div>
+		<div id="mapid"> 
+		</div>
 
 		<!-- Vue app  -->
 		<div id="app"> 
@@ -141,9 +142,13 @@
 
 <script>
 			var mymap = new Vue({
-				
+				el:"#mymap",
+				data:{
+					
+
+				}
 			});
-	 	// Script for adding marker on map click
+
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
 					["Greater East Side",44.979412,-93.027130],
@@ -163,8 +168,8 @@
 					["Summit Hill", 44.936637, -93.139830],
 					["Capitol River",44.957940, -93.103392]	
 				];
-	 	
-				var mymap = L.map('mapid').setView([44.965272, -93.104732],12);
+	 	// Script for adding marker on map click
+				mymap = L.map('mapid').setView([44.965272, -93.104732],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
@@ -174,13 +179,8 @@
 				draggable: false,
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
+				var numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
 
-				//names of the neighbooh in st. paul
-				for (var i = 0; i < locations.length; i++) {
-					marker = new L.marker([locations[i][1],locations[i][2]])
-				.bindPopup(locations[i][0])
-				.addTo(mymap);
-				}
 
 				//can't move it outside st.paul
 				var nWest = L.latLng(44.967595, -93.192643);
@@ -193,9 +193,14 @@
 				function addressIntoCoor(){
 				var addr = document.getElementById("address").value;
 				console.log(address);
-				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=SaintPaul&street= " + addr;
+				console.log(url);
+				$.getJSON(url, function(data){
+					console.log(data);
+				});
 				}
 
+				
 				// rough outline of st.paul 
 				var polygon = L.polygon([
 					[44.890754, -93.003751],
@@ -231,16 +236,16 @@
 					toggleNeighbor:true,
 				}
 			});
-
+			
 			function coorIntoAddress(lat, lng){
 				var lat = document.getElementById("lat").value;
 				var lng = document.getElementById("lng").value;
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lng;
 			}
-			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods")])
-			.then(results => {
-				console.log("results");
-			});
+			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods"), $.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate)])
+			.then(
+
+			);
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
@@ -248,6 +253,7 @@
 				for(let j in data)
 				{	
 					tmp[parseInt(j.substring(1))] = true;
+
 				}
 				app.checked = tmp;
 			
@@ -257,17 +263,28 @@
 			$.getJSON("http://localhost:8000/neighborhoods", function(data){
 				app.neighborhoods = data;
 				let tmp = {};
+
 				for(let j in data)
 				{	
 					tmp[parseInt(j.substring(1))] = true;
+					
 				}
 				app.checked = tmp;
 			});
-			
+			//var hold = {};
 			//console.log("http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate + "&limit=100");
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				app.incidents = data;
-				
+				for(let j in data)
+				{
+					numIncidents[Number(data[j]["neighborhood_number"])] = numIncidents[Number(data[j]["neighborhood_number"])] + 1;
+				}
+				for (let i = 0; i < locations.length; i++) {
+					marker = new L.marker([locations[i][1],locations[i][2]])
+				.bindPopup(locations[i][0] + ":" + numIncidents[i+1])
+				.addTo(mymap);
+				}
+				console.log(numIncidents);
 			});
 
 			function dateChange()
@@ -278,7 +295,11 @@
 
 			}
 			
-			console.log(app.checked);
+				
+				//names of the neighbooh in st. paul
+				
+			
+			//console.log(app.checked);
 		</script>  
 </body>
 </html>
