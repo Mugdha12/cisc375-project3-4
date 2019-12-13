@@ -3,8 +3,8 @@
     "version": "0.0.0",
     "description": "RESTful Server using Node JS",
     "author": {
-         "name": "Mugdha Danda",
-         "email": "dand9530@stthomas.edu"
+        "name": "Mugdha Danda",
+        "email": "dand9530@stthomas.edu"
     },
     "contributors": [
         {
