@@ -177,7 +177,7 @@
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
-				minZoom:12,
+				minZoom:13,
 				center: [searchBox.lat, searchBox.lng],
 				id: 'mapbox/streets-v11',
 				draggable: false,
@@ -203,13 +203,13 @@
 						searchBox.lng = data[0]["lng"];
 					});
 					updateMap();
-					//console.log("Entered Here");
 				}
 				function coorIntoAddress(){
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
 				$.getJSON(url, function(data){
 						console.log(data["address"]["house_number"] + " " + data["address"]["road"] );
 					});
+					updateMap();
 				}
 				function populateIncidents(data)
 				{
@@ -251,7 +251,10 @@
 				//	textinputLat.value = lat;
 				//	textinputLng.value = lng;
 				}
-				
+				let popup = L.popup();
+				mymap.on('clicked',function(e){
+					popup.setLatLng(e.latlng).setContent("You have clicked on the map at" + e.latlng.toString()).openOn(mymap);
+				});
 				// get the coor after it stop zooming 
 				mymap.on('zoomend', function() {
 						getCenter();
@@ -264,14 +267,11 @@
 				
 
 				function updateMap (){
-					//var newLat = searchBox.lat;
-				//	var newLng = searchBox.lat;
-
-					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
+					mymap.panTo(new L.latLng([searchBox.lat,searchBox.lng]));
 					L.marker([51.5, -0.09]);
 				}
 				
-				updateMap();
+				//updateMap();
 				
 		</script>	
 		
