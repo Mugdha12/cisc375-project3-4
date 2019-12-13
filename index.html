@@ -46,7 +46,7 @@
 						
 						Longitude:<br>
 						<input type="text" name="longitude" id="lng">
-						<button onclick> Enter </button>
+						<button onclick="addAddressMarker()"> Enter </button>
 				</form>
 			
 				<form>
@@ -244,13 +244,15 @@
 				function updateMap (){
 					var newLat = document.getElementById('lat').value;
 					var newLng = document.getElementById('lng').value;
-
-					mymap.panTo(new L.latLng(newLat,newLng));
-					console.log(newLat);
-					console.log(newLng);
+					maymap.setView([newLat,newLng],14);
 					
 				
-					L.marker([51.5, -0.09]);
+				
+				}
+
+				function addAddressMarker(address){
+					var newAddress = address.replace("X",0);
+
 				}
 				
 				updateMap();
