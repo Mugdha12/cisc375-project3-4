@@ -195,11 +195,14 @@
 	 	// Script for adding marker on map click
 				 var mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
 				 var popup = L.popup();
+				 var curl;
 					function Init(crimeAPIURL)
 					{
+						curl = crimeAPIURL;
 						createMap();
 						createMarkers();
 						createTable();
+						
 					}
 					function createMap()
 					{
@@ -314,16 +317,6 @@
 
 				function randFunct(data)
 				{
-					/*var message = "";
-					
-					searchBox.address = data.block;
-					addressIntoCoor();
-					var mark = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
-					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button onclick = 'deleteMarker(mark)'> Delete </button>";
-					mark.bindPopup(message);
-        			mark.on('mouseover', function (e) {
-            		this.openPopup();
-        			});*/
 					var markerEl = document.createElement("div");
 					var markerTitle = document.createElement("p");
 					var markerButton = document.createElement("button");
@@ -383,7 +376,7 @@
 				
 			});
 			var promise1 = new Promise ((resolve, reject) => {
-				$.getJSON("http://localhost:8000/codes", function(data){
+				$.getJSON(curl + "/codes", function(data){
 				
 					resolve(data);
 			})
@@ -391,12 +384,12 @@
 		
 			//get the data from neighborhoods
 			var promise2 = new Promise ((resolve, reject) => {
-			$.getJSON("http://localhost:8000/neighborhoods", function(data){
+			$.getJSON(curl + "/neighborhoods", function(data){
 				resolve(data);
 			})
 			});
 			var promise3 = new Promise ((resolve, reject) => {
-			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+			$.getJSON( curl + "/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				
 				resolve(data);
 			})
@@ -442,7 +435,7 @@
 			}
 			function dateChange()
 			{
-				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+				$.getJSON( curl + "/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 					app.incidents = data;
 					populateIncidents();
 				});
