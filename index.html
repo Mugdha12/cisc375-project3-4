@@ -264,8 +264,11 @@
 				
 
 				function updateMap (){
-					//var newLat = searchBox.lat;
-				//	var newLng = searchBox.lat;
+				var newAdress = searchBox.address.replace("X",0);
+				// addressIntoCoor();
+
+
+				console.log(addressIntoCoor());
 
 					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
 					// L.marker([51.5, -0.09]);
