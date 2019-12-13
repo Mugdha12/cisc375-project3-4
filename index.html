@@ -268,19 +268,16 @@
 				function randFunct(data)
 				{
 					var message = "";
-					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button @click = removeMarker()> Delete </button>";
+					
 					searchBox.address = data.block;
 					addressIntoCoor();
 					marker = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
+					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button onclick = mymap.on('click',function(){mymap.removeLayer(marker)})> Delete </button>";
 					marker.bindPopup(message);
         			marker.on('mouseover', function (e) {
             		this.openPopup();
         			});
 					
-				}
-				function removeMarker()
-				{
-					marker.remove();
 				}
 				//searck lat.lng works - puts markers
 				function updateMap (){
