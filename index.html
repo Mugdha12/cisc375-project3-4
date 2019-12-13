@@ -325,10 +325,9 @@
 				}
 				for (let i = 0; i < locations.length; i++) {
 					marker = new L.marker([locations[i][1],locations[i][2]])
-				.bindPopup(locations[i][0] + ":" + numIncidents[i+1])
+				.bindPopup(locations[i][0] + ": <br />" + " Number of Crimes: " + numIncidents[i+1])
 				.addTo(mymap);
 				}
-				console.log(numIncidents);
 			});
 
 			function dateChange()
@@ -336,14 +335,8 @@
 				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 					app.incidents = data;
 				});
-
 			}
-			
-				
-				//names of the neighbooh in st. paul
-				
-			
-			//console.log(app.checked);
+
 		</script>  
 </body>
 </html>
