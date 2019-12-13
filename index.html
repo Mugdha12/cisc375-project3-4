@@ -22,9 +22,12 @@
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 </head>
-<body>
+<body onload = "Prompt()">
    
-
+	<div id="dialog-form">
+        <label for="name">URL for St. Paul Crime API:</label>
+        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
+    </div>
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -39,7 +42,7 @@
 						<p> Please input  Lan. and Long. below  </p>
 						<input type="number" v-model="lat">
 						<input type="number"  v-model="lng">
-						<button onclick="coorIntoAddress(); updateMap()"> Enter </button>
+						<button onclick="coorIntoAddress()"> Enter </button>
 					</div>
 
 						<button @click='toogleAdd=!toogleAdd'>Address</button>
@@ -116,7 +119,7 @@
 				</thead>
 				<tbody >
 					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
-					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime)" @click="randFunct(row)">  
+					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime)" @click="randFunct(row)" v-bind:class=" crimeRows(row.incident)">
 					<!---<td>{{row}}</td>--->
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
@@ -137,6 +140,26 @@
 
 
 <script type="application/javascript">
+		function Prompt() {
+            $("#dialog-form").dialog({
+                autoOpen: true,
+                modal: true,
+                width: "360px",
+                buttons: {
+                    "Ok": function() {
+                        var prompt_input = $("#prompt_input");
+                        Init(prompt_input.val());
+                        $(this).dialog("close");
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        }
+		function Init(crimeAPIURL){
+
+		}
 			var searchBox = new Vue({
 				el:"#searchBox",
 				data:{
@@ -148,7 +171,7 @@
 				}
 			});
 			var newIcon = L.icon({iconUrl: 'location-pin.svg', iconSize: [40,40]});
-			
+			var marker;
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
 					["Greater East Side",44.979412,-93.027130],
@@ -274,13 +297,17 @@
 					
 					searchBox.address = data.block;
 					addressIntoCoor();
-					marker = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
-					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button onclick = mymap.on('click',function(){mymap.removeLayer(marker)})> Delete </button>";
-					marker.bindPopup(message);
-        			marker.on('mouseover', function (e) {
+					var mark = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
+					message = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident + "<button onclick = 'deleteMarker(mark)'> Delete </button>";
+					mark.bindPopup(message);
+        			mark.on('mouseover', function (e) {
             		this.openPopup();
         			});
 					
+				}
+				function deleteMarker(mark){
+					console.log(mark);
+					mymap.removeLayer(mark);
 				}
 				//searck lat.lng works - puts markers
 				function updateMap (){
@@ -323,10 +350,10 @@
 
 
 			function crimeRows (crimeName){
-				var lowCrimeName = crimeName.toLowerCases();
+				var lowCrimeName = crimeName.toLowerCase();
 				//personal crime
-				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assualt') || lowCrimeName.includes('norcotics')){
-					return "personl";
+				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assault') || lowCrimeName.includes('narcotics')){
+					return "personal";
 					//violent crme
 				}else if(lowCrimeName.includes('murder') || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon')){
 					return "violent";

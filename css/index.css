@@ -56,6 +56,15 @@ th {
 	margin-right: 0.5em;
 	margin-left: 0.5em;
 }
+.violent{
+	background-color: red;
+}
+.personal{
+	background-color:grey;
+}
+.property{
+	background-color:blue;
+}
 #na li a{ display: inline-block;}
 #na li a:hover{background-color: #ddd;} 
 #na{
