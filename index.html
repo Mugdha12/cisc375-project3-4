@@ -25,12 +25,12 @@
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 </head>
-<body >
+<body onload="Prompt()">
    
-	<!--<div id="dialog-form">
+	<div id="dialog-form">
         <label for="name">URL for St. Paul Crime API:</label>
         <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
-    </div> -->
+    </div> 
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -73,9 +73,9 @@
 						<!-- time -->
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
-						<input type = "time"  min="00:00:00" max = "23:59:59" v-model= "startTime"> <br>
+						<input type = "time"  min="00:00:00" max = "23:59:59" v-model= "startTime" @change= "updateTotalIncidents()"> <br>
 						<label for="end"> End Time:</label>
-						<input type = "time"  min="00:00:00" max = "23:59:59" v-model="endTime"> <br>
+						<input type = "time"  min="00:00:00" max = "23:59:59" v-model="endTime" @change= "updateTotalIncidents()"> <br>
 						</li>
 						<!-- calendar -->
 						<li  v-show='!toggleDate' >
@@ -87,7 +87,7 @@
 						<!-- checklist for incident -->
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
-						<input type="checkbox"   v-model="checked[key.substring(1)]" />
+						<input type="checkbox"   @change= "populateIncidents()" v-model="checked[key.substring(1)]" />
 						</li>
 						<!-- checklist for neighborhoods -->	
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
@@ -124,7 +124,7 @@
 					</tr>
 				</thead>
 				<tbody >
-					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime)" @click="randFunct(row)" v-bind:class=" crimeRows(row.incident)">
+					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] && checked[row.code]) && (row.time >= startTime && row.time <= endTime)" @click="randFunct(row)" v-bind:class=" crimeRows(row.incident)">
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
 						<td> {{key}}</td>
@@ -143,7 +143,7 @@
 
 
 <script type="application/javascript">
-	/*	function Prompt() {
+		function Prompt() {
             $("#dialog-form").dialog({
                 autoOpen: true,
                 modal: true,
@@ -159,10 +159,8 @@
                     }
                 }
             });
-        }*/
-		function Init(crimeAPIURL){
-
-		}
+        }
+	
 			var searchBox = new Vue({
 				el:"#searchBox",
 				data:{
@@ -195,26 +193,51 @@
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	// Script for adding marker on map click
-				var mymap = L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
-				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-				maxZoom: 17,
-				minZoom:12,
-				center: [searchBox.lat, searchBox.lng],
-				id: 'mapbox/streets-v11',
-				draggable: false,
-				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
-				}).addTo(mymap);
+				 var mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
+				 var popup = L.popup();
+					function Init(crimeAPIURL)
+					{
+						createMap();
+						createMarkers();
+						createTable();
+					}
+					function createMap()
+					{
+						//mymap= L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
+						L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+						attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+						maxZoom: 17,
+						minZoom:12,
+						center: [searchBox.lat, searchBox.lng],
+						id: 'mapbox/streets-v11',
+						draggable: false,
+						accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
+						}).addTo(mymap);
+						var nWest = L.latLng(44.967595, -93.192643);
+						var sEast = L.latLng(44.940768, -93.044095);
+						var myBounds = L.latLngBounds(nWest, sEast);
+						mymap.setMaxBounds(myBounds);	
+						var polygon = L.polygon([
+							[44.890754, -93.003751],
+							[44.921335, -93.048377],
+							[44.919512, -93.130088],
+							[44.888386, -93.177123],
+							[44.987541, -93.206992],
+							[44.990698, -93.006492],
+							]).addTo(mymap);
+					}
+					
 				var numIncidents; 
+				var markers = [[]];
+			
+				function createMarkers()
+				{
+					for (let i = 0; i < locations.length; i++) {
+						markers[i] = new L.marker([locations[i][1],locations[i][2]])
+						.addTo(mymap);
+					}
 
-
-				//can't move it outside st.paul
-				var nWest = L.latLng(44.967595, -93.192643);
-				var sEast = L.latLng(44.940768, -93.044095);
-				var myBounds = L.latLngBounds(nWest, sEast);
-				mymap.setMaxBounds(myBounds);	
-
-
+				}
 				//changing the address
 				function addressIntoCoor(){
 					var nAddr = searchBox.address.replace(/\s/g, "%20");
@@ -222,11 +245,11 @@
 					//console.log(url);
 					$.getJSON(url, function(data){
 						searchBox.lat = data[0]["lat"];
-						//console.log(data[0]["lon"]);
 						searchBox.lng = data[0]["lon"];
 					});
 					updateMap();
 				}
+
 				function coorIntoAddress(){
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
 				$.getJSON(url, function(data){
@@ -237,32 +260,30 @@
 						}
 						searchBox.address = searchBox.address +  " " + data["address"]["road"];
 					});
-					console.log(searchBox.address);
+					//console.log(searchBox.address);
 					updateMap();
 				}
-				function populateIncidents(data)
+				function populateIncidents()
 				{
-					for(let j in data)
+					numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
+					
+					for(let j in app.incidents)
 					{
-						numIncidents[Number(data[j]["neighborhood_number"])] = numIncidents[Number(data[j]["neighborhood_number"])] + 1;
+						//console.log(app.incidents[j]["code"]);
+						if(app.checked[app.incidents[j]["code"]] && (app.incidents[j]["time"] >= app.startTime && app.incidents[j]["time"] <= app.endTime))
+						{
+							numIncidents[Number(app.incidents[j]["neighborhood_number"])] = numIncidents[Number(app.incidents[j]["neighborhood_number"])] + 1;
+						}
+						
 					}
-					for (let i = 0; i < locations.length; i++) {
-						marker = new L.marker([locations[i][1],locations[i][2]])
-						.bindPopup(locations[i][0] + ": <br /> Crime Number:" + numIncidents[i+1])
-						.addTo(mymap);
+					for (let i = 0; i < markers.length; i++) {
+						markers[i].bindPopup(locations[i][0] + ": <br /> Crime Number:" + numIncidents[i+1]);
 					}
 
 				}
 				
 				// rough outline of st.paul 
-				var polygon = L.polygon([
-					[44.890754, -93.003751],
-					[44.921335, -93.048377],
-					[44.919512, -93.130088],
-					[44.888386, -93.177123],
-					[44.987541, -93.206992],
-					[44.990698, -93.006492],
-				]).addTo(mymap);
+			
 
 				//get the search input to change when the map is being moved 
 
@@ -274,8 +295,9 @@
 					searchBox.lng = currentCenter.lng;					
 				}
 				// when clicked it give you the coor.lat/lng
-				let popup = L.popup();
+				
 				mymap.on('click',function(e){
+					//console.log()
 					popup.setLatLng(e.latlng).setContent("You have clicked on the map at" + e.latlng.toString()).openOn(mymap);
 				});
 				// get the coor after it stop zooming 
@@ -287,10 +309,6 @@
 				mymap.on('dragged', function() {
 					getCenter();
 				});
-
-				/*mymap.on('mouseover', function(e){
-					mymap.open
-				});*/
 
 				
 
@@ -338,8 +356,10 @@
 		</script>	
 		
 		<script type="application/javascript">
-			
-			var app = new Vue({
+			var app;
+			function createTable()
+			{
+				app = new Vue({
 				el:"#app",
 				data:{
 					form:{
@@ -362,9 +382,48 @@
 				},
 				
 			});
-			
+			var promise1 = new Promise ((resolve, reject) => {
+				$.getJSON("http://localhost:8000/codes", function(data){
+				
+					resolve(data);
+			})
+			});
+		
+			//get the data from neighborhoods
+			var promise2 = new Promise ((resolve, reject) => {
+			$.getJSON("http://localhost:8000/neighborhoods", function(data){
+				resolve(data);
+			})
+			});
+			var promise3 = new Promise ((resolve, reject) => {
+			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
+				
+				resolve(data);
+			})
+			});
+			Promise.all([promise1, promise2,promise3]).then(results => {
+				app.codes = results[0];
+				let tmp = {};
+				for(let j in results[0])
+				{	
+					tmp[parseInt(j.substring(1))] = true;
+
+				}
+
+				app.neighborhoods = results[1];
 
 
+				for(let j in results[1])
+				{	
+					tmp[parseInt(j.substring(1))] = true;
+					
+				}
+				app.checked = tmp;
+				app.incidents = results[2];
+				populateIncidents();
+				
+				});
+			}
 
 			function crimeRows (crimeName){
 				var lowCrimeName = crimeName.toLowerCase();
@@ -381,49 +440,11 @@
 					return "other";
 				}
 			}
-			
-			
-			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods"), $.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate)])
-			
-			//gets the date codes
-			$.getJSON("http://localhost:8000/codes", function(data){
-				app.codes = data;	
-				let tmp = {};
-				for(let j in data)
-				{	
-					tmp[parseInt(j.substring(1))] = true;
-
-				}
-				app.checked = tmp;
-			
-			});
-		
-			//get the data from neighborhoods
-			$.getJSON("http://localhost:8000/neighborhoods", function(data){
-				app.neighborhoods = data;
-				let tmp = {};
-
-				for(let j in data)
-				{	
-					tmp[parseInt(j.substring(1))] = true;
-					
-				}
-				app.checked = tmp;
-			});
-
-			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
-				app.incidents = data;
-				numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
-				populateIncidents(data);
-				
-			});
-			
 			function dateChange()
 			{
 				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 					app.incidents = data;
-					numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
-					populateIncidents(data);
+					populateIncidents();
 				});
 			}
 		</script>  
