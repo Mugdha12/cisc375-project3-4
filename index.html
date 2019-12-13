@@ -38,22 +38,21 @@
 
 		<!-- the search bars  -->
 		<div id= "searchBox">
-				<p> Please input  Lan. and Long. below  </p>
-				<form>
-						Latitude:<br>
-						<input type="text" name="latitude" id="lat">
-						<br> 
-						
-						Longitude:<br>
-						<input type="text" name="longitude" id="lng">
-						<button onclick="addAddressMarker()"> Enter </button>
-				</form>
-			
-				<form>
+				
+						<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
+						<div v-show="!toogleLatLog"> 
+						<p> Please input  Lan. and Long. below  </p>
+						<input type="number" v-model="lat">
+						<input type="number"  v-model="lng">
+						<button onclick="coorIntoAddress()"> Enter </button>
+					</div>
+
+						<button @click='toogleAdd=!toogleAdd'>Address</button>
+						<div v-show = "!toogleAdd"> 
 						<p> Please enter your address<p>
-						<input type="text"  id="address">
+						<input type="text"  v-model="address">
 						<button onclick="addressIntoCoor()"> Enter </button>
-				</form>
+					</div>
 		</div>
 
 
@@ -63,10 +62,9 @@
 
 		<!-- Vue app  -->
 		<div id="app"> 
-				<div id="button">
-					<button @click='toggleFilter = !toggleFilter; filterCounter =+ 1' id="first"> Filter  </button>				
-				</div>
-				<div v-show='!toggleFilter' id="filters" > 
+				
+				<button @click='toggleFilter = !toggleFilter; filterCounter =+ 1' id="first"> Filter  </button>				
+				<div v-show='!toggleFilter'> 
 				
 					<ul >
 						<!-- time -->
@@ -143,15 +141,18 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 
 
-<script>
-			var mymap = new Vue({
-				el:"#mymap",
+<script type="application/javascript">
+			var searchBox = new Vue({
+				el:"#searchBox",
 				data:{
-					
-
+					lat:44.965272,
+					lng: -93.104732,
+					address:"",
+					toogleLatLog:true,
+					toogleAdd:true
 				}
 			});
-
+			
 			var locations = [
 					["Conway/Battlecreek/Highwood",44.927682,-93.026969],
 					["Greater East Side",44.979412,-93.027130],
@@ -172,17 +173,17 @@
 					["Capitol River",44.957940, -93.103392]	
 				];
 	 	// Script for adding marker on map click
-				mymap = L.map('mapid').setView([44.965272, -93.104732],12);
+				var mymap = L.map('mapid').setView([searchBox.lat, searchBox.lng],12);
 				L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
 				minZoom:12,
-				center: [44.965272, -93.104732],
+				center: [searchBox.lat, searchBox.lng],
 				id: 'mapbox/streets-v11',
 				draggable: false,
 				accessToken: 'pk.eyJ1IjoibWl0emlidXN0YW1hbnRlIiwiYSI6ImNrM3VkOGoyYjBja2MzdG1yMzd6anEzYTIifQ.H2RDitN6lPMzEf2n_Ag9Ng'
 				}).addTo(mymap);
-				var numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
+				var numIncidents; 
 
 
 				//can't move it outside st.paul
@@ -194,15 +195,35 @@
 
 				//changing the address
 				function addressIntoCoor(){
-				var addr = document.getElementById("address").value;
-				console.log(address);
-				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=SaintPaul&street= " + addr;
-				console.log(url);
-				$.getJSON(url, function(data){
-					console.log(data);
-				});
+					var nAddr = searchBox.address.replace(/\s/g, "%20");
+					var url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&state=Minnesota&city=Saint%20Paul&street=" + nAddr;
+					//console.log(url);
+					$.getJSON(url, function(data){
+						searchBox.lat = data[0]["lat"];
+						searchBox.lng = data[0]["lng"];
+					});
+					updateMap();
+					//console.log("Entered Here");
 				}
+				function coorIntoAddress(){
+				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
+				$.getJSON(url, function(data){
+						console.log(data["address"]["house_number"] + " " + data["address"]["road"] );
+					});
+				}
+				function populateIncidents(data)
+				{
+					for(let j in data)
+					{
+						numIncidents[Number(data[j]["neighborhood_number"])] = numIncidents[Number(data[j]["neighborhood_number"])] + 1;
+					}
+					for (let i = 0; i < locations.length; i++) {
+						marker = new L.marker([locations[i][1],locations[i][2]])
+						.bindPopup(locations[i][0] + ":" + numIncidents[i+1])
+						.addTo(mymap);
+					}
 
+				}
 				
 				// rough outline of st.paul 
 				var polygon = L.polygon([
@@ -219,16 +240,16 @@
 					var bounds = mymap.getBounds();
 					var currentLat = currentCenter.lat;
 					var currentLng = currentCenter.lng;
-					updateText(currentLat,currentLng, bounds);
+					// updateText(currentLat,currentLng, bounds);
 					
 				}
 
 				function updateText(lat,lng,bounds){
-					var textinputLat = document.getElementById("lat");
-					var textinputLng = document.getElementById('lng');
+					// var textinputLat = document.getElementById("lat");
+					// var textinputLng = document.getElementById('lng');
 
-					textinputLat.value = lat;
-					textinputLng.value = lng;
+					// textinputLat.value = lat;
+					// textinputLng.value = lng;
 				}
 				
 				// get the coor after it stop zooming 
@@ -240,19 +261,14 @@
 				mymap.on('dragged', function() {
 					getCenter();
 				});
+				
 
 				function updateMap (){
-					var newLat = document.getElementById('lat').value;
-					var newLng = document.getElementById('lng').value;
-					maymap.setView([newLat,newLng],14);
-					
-				
-				
-				}
+					//var newLat = searchBox.lat;
+				//	var newLng = searchBox.lat;
 
-				function addAddressMarker(address){
-					var newAddress = address.replace("X",0);
-
+					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
+					// L.marker([51.5, -0.09]);
 				}
 				
 				updateMap();
@@ -283,11 +299,7 @@
 				}
 			});
 			
-			function coorIntoAddress(lat, lng){
-				var lat = document.getElementById("lat").value;
-				var lng = document.getElementById("lng").value;
-				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lng;
-			}
+			
 			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods"), $.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate)])
 			.then(
 
@@ -317,28 +329,22 @@
 				}
 				app.checked = tmp;
 			});
-			//var hold = {};
-			//console.log("http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate + "&limit=100");
+
 			$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 				app.incidents = data;
-				for(let j in data)
-				{
-					numIncidents[Number(data[j]["neighborhood_number"])] = numIncidents[Number(data[j]["neighborhood_number"])] + 1;
-				}
-				for (let i = 0; i < locations.length; i++) {
-					marker = new L.marker([locations[i][1],locations[i][2]])
-				.bindPopup(locations[i][0] + ": <br />" + " Number of Crimes: " + numIncidents[i+1])
-				.addTo(mymap);
-				}
+				numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
+				populateIncidents(data);
+				
 			});
 
 			function dateChange()
 			{
 				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
 					app.incidents = data;
+					numIncidents={1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0};
+					populateIncidents(data);
 				});
 			}
-
 		</script>  
 </body>
 </html>
