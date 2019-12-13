@@ -1,1 +1,79 @@
-mfbn
+@font-face {
+	font-family: Handlee;
+	src: url(handlee-regular.ttf);
+}
+/* *{
+	font-family: Handlee;
+	
+} */
+body{
+	background-color: #DCEEF2;
+	font-family: Handlee;
+}
+#mapid {
+	 height: 550px; 
+	 width:70%; 
+	 float: right;
+}
+#input{
+	text-align: right;
+}
+#wrapper{
+	margin-left: 5em;
+	margin-right: 5em;
+}
+#header{
+	height: 3.5em;
+	font-size: 1.7vw;
+	text-align: center;
+
+}
+
+p{
+	font-size: 20px;
+}
+
+#firstTable{float: left;}
+table{ border-collapse: collapse; font-size: 1.2vw;width: 100%;}
+table, th, td { border: 1px solid black; }
+th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color:#586BA6;
+	color: white;
+	padding-left: 12px;
+	padding-right: 12px;
+	
+  }
+/* For the about images */
+#na li {
+	display: inline-block;
+	padding: 1em;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+}
+.violent{
+	background-color: #B35952;
+}
+.personal{
+	background-color:#BAB6B1;
+}
+.property{
+	background-color:#607EB3;
+}
+.other{
+	background-color: #B4CC7C;
+}
+#na li a{ display: inline-block;}
+#na li a:hover{background-color: #ddd;} 
+#na{
+	list-style-type: none;
+	padding: 0;
+	text-align: left;
+	font-family: Daugther;
+	font-size: 1vw;
+}
+#icon{ width: 7em; height: 7em;}
+#facts{float: right;}
+
