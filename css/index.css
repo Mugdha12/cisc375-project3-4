@@ -11,8 +11,8 @@ body{
 	font-family: Handlee;
 }
 #mapid {
-	 height: 600px; 
-	 width:100%; 
+	 height: 550px; 
+	 width:70%; 
 	 float: right;
 }
 #input{
