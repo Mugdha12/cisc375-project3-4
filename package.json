@@ -1,10 +1,10 @@
 {
-    "name": "RESTful server ",
+    "name": "cisc375-project3-4 ",
     "version": "0.0.0",
     "description": "RESTful Server using Node JS",
     "author": {
-        "name": "Mitzi Bustamante",
-        "email": "bust6340@stthomas.edu"
+         "name": "Mugdha Danda",
+         "email": "dand9530@stthomas.edu"
     },
     "contributors": [
         {
@@ -19,7 +19,7 @@
     "main": "server.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Mitzivera/RESTfulServer"
+        "url": "https://github.com/Mugdha12/cisc375-project3-4"
     },
     "dependencies": {
         "cors": "^2.8.5",
