@@ -7,27 +7,31 @@
  
 	<!-- this is the css of leaf let -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-   crossorigin=""/> 
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin=""/> 
    
    <!-- this is the js for the left let -->
-   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-   crossorigin=""></script>
-   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+   	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   	integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+  	crossorigin=""></script>
+   	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 </head>
 <body onload = "Prompt()">
    
-	<div id="dialog-form">
+	<!-- <div id="dialog-form">
         <label for="name">URL for St. Paul Crime API:</label>
         <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
-    </div>
+	</div> -->
+	
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -35,28 +39,25 @@
 		</div>
 
 		<!-- the search bars  -->
-		<div id= "searchBox">
-				
-						<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
-						<div v-show="!toogleLatLog"> 
-						<p> Please input  Lan. and Long. below  </p>
-						<input type="number" v-model="lat">
-						<input type="number"  v-model="lng">
-						<button onclick="coorIntoAddress()"> Enter </button>
-					</div>
+		<div id= "searchBox">	
+			<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
+			<div v-show="!toogleLatLog"> 
+				<p> Please input  Lan. and Long. below  </p>
+				<input type="number" v-model="lat">
+				<input type="number"  v-model="lng">
+				<button onclick="coorIntoAddress()"> Enter </button>
+			</div>
 
-						<button @click='toogleAdd=!toogleAdd'>Address</button>
-						<div v-show = "!toogleAdd"> 
-						<p> Please enter your address<p>
-						<input type="text"  v-model="address">
-						<button onclick="addressIntoCoor()"> Enter </button>
-					</div>
+			<button @click='toogleAdd=!toogleAdd'>Address</button>
+			<div v-show = "!toogleAdd"> 
+				<p> Please enter your address<p>
+				<input type="text"  v-model="address">
+				<button onclick="addressIntoCoor()"> Enter </button>
+			</div>
 		</div>
-
 
 		<!-- the map  -->
-		<div id="mapid"> 
-		</div>
+		<div id="mapid"> </div>
 
 		<!-- Vue app  -->
 		<div id="app"> 
@@ -101,6 +102,17 @@
 						</li>
 					</ul>
 				</div>
+				<!-- legend is being created -->
+				<form>
+					<fieldset>
+						<legend>Crime Colors</legend>
+						Personal Crime: Grey <br>
+						Violent Crime: Red <br>
+						Property Crime: <br>
+						Other: Blue
+
+					</fieldset>
+				</form>
 
 		
 		<!-- the table of data  -->
@@ -135,8 +147,7 @@
 		</div>
 	</div>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
+		
 
 
 <script type="application/javascript">
