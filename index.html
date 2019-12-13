@@ -46,7 +46,7 @@
 						
 						Longitude:<br>
 						<input type="text" name="longitude" id="lng">
-						<button onclick="updateMap()"> Enter </button>
+						<button onclick> Enter </button>
 				</form>
 			
 				<form>
@@ -196,7 +196,7 @@
 				function addressIntoCoor(){
 				var addr = document.getElementById("address").value;
 				console.log(address);
-				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street= " + addr;
+				var url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street=" + addr;
 				}
 
 				// rough outline of st.paul 
@@ -241,9 +241,14 @@
 					var newLng = document.getElementById('lng').value;
 
 					mymap.panTo(new L.latLng(newLat,newLng));
+					console.log(newLat);
+					console.log(newLng);
+					
+				
 					L.marker([51.5, -0.09]);
 				}
-
+				
+				updateMap();
 				
 		</script>	
 		
