@@ -22,12 +22,12 @@
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
 </head>
-<body onload = "Prompt()">
+<body >
    
-	<div id="dialog-form">
+	<!--<div id="dialog-form">
         <label for="name">URL for St. Paul Crime API:</label>
         <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;"/>
-    </div>
+    </div> -->
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
@@ -140,7 +140,7 @@
 
 
 <script type="application/javascript">
-		function Prompt() {
+	/*	function Prompt() {
             $("#dialog-form").dialog({
                 autoOpen: true,
                 modal: true,
@@ -156,7 +156,7 @@
                     }
                 }
             });
-        }
+        }*/
 		function Init(crimeAPIURL){
 
 		}
@@ -293,7 +293,7 @@
 
 				function randFunct(data)
 				{
-					var message = "";
+					/*var message = "";
 					
 					searchBox.address = data.block;
 					addressIntoCoor();
@@ -302,18 +302,32 @@
 					mark.bindPopup(message);
         			mark.on('mouseover', function (e) {
             		this.openPopup();
-        			});
-					
+        			});*/
+					var markerEl = document.createElement("div");
+					var markerTitle = document.createElement("p");
+					var markerButton = document.createElement("button");
+					markerTitle.textContent = "date: " + data.date + " time: " + data.time + " incident:" +  data.incident;
+					markerButton.type = "button";
+					markerButton.textContent = "Delete";
+					markerButton.className = "deleteMarker";
+					markerEl.appendChild(markerTitle);
+					markerEl.appendChild(markerButton);
+					searchBox.address = data.block;
+					addressIntoCoor();
+					var mark = new L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap);
+					mark.bindPopup(markerEl);
+					mark.on('mouseover', function(e){
+						this.openPopup();
+					});
+					markerButton.onclick=function(){
+						console.log(mark);
+						mymap.removeLayer(mark);
+					};
 				}
-				function deleteMarker(mark){
-					console.log(mark);
-					mymap.removeLayer(mark);
-				}
+
 				//searck lat.lng works - puts markers
 				function updateMap (){
 					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
-					marker = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap)
-					.bindPopup("Lat = " + searchBox.lat + "<br /> Lng = "+ searchBox.lng);
 				}
 
 			
@@ -355,10 +369,10 @@
 				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assault') || lowCrimeName.includes('narcotics')){
 					return "personal";
 					//violent crme
-				}else if(lowCrimeName.includes('murder') || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon')){
+				}else if(lowCrimeName.indexOf('murder') !== -1 || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon')){
 					return "violent";
 					//personal
-				}else if(lowCrimeName.includes('theft') || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property')){
+				}else if(lowCrimeName.indexOf('theft') !== -1 || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property')){
 					return "property"
 				}else{
 					return "other";
