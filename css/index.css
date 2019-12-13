@@ -46,9 +46,6 @@ th {
 	padding-right: 12px;
 	
   }
-  tr:nth-child(even){background-color:#A0C3D9;}
-
-
 /* For the about images */
 #na li {
 	display: inline-block;
@@ -57,13 +54,16 @@ th {
 	margin-left: 0.5em;
 }
 .violent{
-	background-color: red;
+	background-color: #B35952;
 }
 .personal{
-	background-color:grey;
+	background-color:#BAB6B1;
 }
 .property{
-	background-color:blue;
+	background-color:#607EB3;
+}
+.other{
+	background-color: #B4CC7C;
 }
 #na li a{ display: inline-block;}
 #na li a:hover{background-color: #ddd;} 

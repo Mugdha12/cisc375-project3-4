@@ -7,17 +7,20 @@
  
 	<!-- this is the css of leaf let -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-   crossorigin=""/> 
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin=""/> 
    
    <!-- this is the js for the left let -->
-   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-   crossorigin=""></script>
-   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+   	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   	integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+  	crossorigin=""></script>
+   	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
@@ -31,47 +34,43 @@
 	<div id=wrapper>
 		<div id="header">
 			<h1> St.Paul Crime </h1>
-			 <p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
+			<p><a href="index.html">Project </a> | <a href="about.html">About Us</a></p>
 		</div>
 
 		<!-- the search bars  -->
-		<div id= "searchBox">
-				
-						<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
-						<div v-show="!toogleLatLog"> 
-						<p> Please input  Lan. and Long. below  </p>
-						<input type="number" v-model="lat">
-						<input type="number"  v-model="lng">
-						<button onclick="coorIntoAddress()"> Enter </button>
-					</div>
-
-						<button @click='toogleAdd=!toogleAdd'>Address</button>
-						<div v-show = "!toogleAdd"> 
-						<p> Please enter your address<p>
-						<input type="text"  v-model="address">
-						<button onclick="addressIntoCoor()"> Enter </button>
-					</div>
+		<div id= "searchBox">	
+			<!-- Lat/Lng -->
+			<button @click='toogleLatLog = !toogleLatLog'>Lat/Log</button><br>
+			<div v-show="!toogleLatLog"> 
+				<p> Please input  Lan. and Long. below  </p>
+				<input type="number" v-model="lat">
+				<input type="number"  v-model="lng">
+				<button onclick="coorIntoAddress()"> Enter </button>
+			</div>
+			<!-- adress -->
+			<button @click='toogleAdd=!toogleAdd'>Address</button>
+			<div v-show = "!toogleAdd"> 
+				<p> Please enter your address<p>
+				<input type="text"  v-model="address">
+				<button onclick="addressIntoCoor()"> Enter </button>
+			</div>
 		</div>
-
 
 		<!-- the map  -->
-		<div id="mapid"> 
-		</div>
+		<div id="mapid"> </div>
 
 		<!-- Vue app  -->
 		<div id="app"> 
-				
+				<!-- filter -->
 				<button @click='toggleFilter = !toggleFilter; filterCounter =+ 1' id="first"> Filter  </button>				
 				<div v-show='!toggleFilter'> 
-				
 					<ul >
-						<!-- time -->
-						
+						<!-- all filters -->
 						<button @click='toggleTime = !toggleTime'> Time </button>
 						<button @click='toggleDate = !toggleDate'> Date </button>
 						<button @click='toggleIncident= !toggleIncident'> Incident </button>
 						<button @click='toggleNeighbor = !toggleNeighbor'> Neighborhoods</button>
-						
+						<!-- time -->
 						<li  v-show='!toggleTime' >
 						<label for="start">Start Time:</label>
 						<input type = "time"  min="00:00:00" max = "23:59:59" v-model= "startTime"> <br>
@@ -79,7 +78,6 @@
 						<input type = "time"  min="00:00:00" max = "23:59:59" v-model="endTime"> <br>
 						</li>
 						<!-- calendar -->
-						
 						<li  v-show='!toggleDate' >
 						<label for="start">Start Date:</label>
 						<input type="date"   min="2014-08-14" max="2019-10-31" v-model= "form.startDate" @change="dateChange"> <br>
@@ -87,20 +85,28 @@
 						<input type="date"   min="2014-08-14" max="2019-10-31" v-model="form.endDate" @change="dateChange"><br>
 						</li>
 						<!-- checklist for incident -->
-						
 						<li v-for="(incident_type,key) in codes" v-show='!toggleIncident'>
 						{{ incident_type}}
 						<input type="checkbox"   v-model="checked[key.substring(1)]" />
 						</li>
-
 						<!-- checklist for neighborhoods -->	
-						
 						<li v-for="(neighborhood_name,key) in neighborhoods" v-show='!toggleNeighbor' >
 						{{ neighborhood_name}}
 						<input type="checkbox"  v-model="checked[key.substring(1)]" />
 						</li>
 					</ul>
 				</div>
+
+				<!-- legend is being created -->
+				<form>
+					<fieldset>
+						<legend>Crime Colors</legend>
+						Personal Crime: Grey <br>
+						Violent Crime: Red <br>
+						Property Crime: Blue<br>
+						Other: Green 
+					</fieldset>
+				</form>
 
 		
 		<!-- the table of data  -->
@@ -118,9 +124,7 @@
 					</tr>
 				</thead>
 				<tbody >
-					<!---v-if="app.checked[row.neighborhood_number] || app.checked[row.incident]"-->
 					<tr v-for="(row,key) in incidents" v-if="(checked[row.neighborhood_number] || checked[row.code]) && (row.time >= startTime && row.time <= endTime)" @click="randFunct(row)" v-bind:class=" crimeRows(row.incident)">
-					<!---<td>{{row}}</td>--->
 						<td>{{row.date}}</td>
 						<td>{{row.time}}</td>
 						<td> {{key}}</td>
@@ -135,8 +139,7 @@
 		</div>
 	</div>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
+		
 
 
 <script type="application/javascript">
@@ -366,13 +369,13 @@
 			function crimeRows (crimeName){
 				var lowCrimeName = crimeName.toLowerCase();
 				//personal crime
-				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assault') || lowCrimeName.includes('narcotics')){
+				if(lowCrimeName.includes('rape') || lowCrimeName.includes('assault') || lowCrimeName.includes('narcotics') || lowCrimeName.includes('asasult')){
 					return "personal";
 					//violent crme
-				}else if(lowCrimeName.indexOf('murder') !== -1 || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon')){
+				}else if(lowCrimeName.includes('murder') || lowCrimeName.includes('arson') || lowCrimeName.includes('weapon') || lowCrimeName.includes('discharge')){
 					return "violent";
 					//personal
-				}else if(lowCrimeName.indexOf('theft') !== -1 || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property')){
+				}else if(lowCrimeName.includes('theft') || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property') || lowCrimeName.includes('vandalism')){
 					return "property"
 				}else{
 					return "other";
@@ -381,9 +384,7 @@
 			
 			
 			Promise.all([$.getJSON("http://localhost:8000/codes"), $.getJSON("http://localhost:8000/neighborhoods"), $.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate)])
-			.then(
-
-			);
+			
 			//gets the date codes
 			$.getJSON("http://localhost:8000/codes", function(data){
 				app.codes = data;	
@@ -416,7 +417,7 @@
 				populateIncidents(data);
 				
 			});
-
+			
 			function dateChange()
 			{
 				$.getJSON( "http://localhost:8000/incidents?start_date=" + app.form.startDate + "&end_date=" + app.form.endDate, function(data){
