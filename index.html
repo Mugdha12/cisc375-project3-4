@@ -258,15 +258,14 @@
 					getCenter();
 				});
 				
-
+				//searck lat.lng works - puts markers
 				function updateMap (){
 					mymap.panTo(new L.latLng(searchBox.lat,searchBox.lng));
-					L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap)
+					marker = L.marker([searchBox.lat, searchBox.lng],{icon: newIcon}).addTo(mymap)
 					.bindPopup("Lat = " + searchBox.lat + "<br /> Lng = "+ searchBox.lng);
-
 				}
-				
-				// updateMap();
+
+			
 				
 		</script>	
 		
