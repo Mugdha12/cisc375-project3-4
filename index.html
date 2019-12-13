@@ -236,16 +236,15 @@
 					var bounds = mymap.getBounds();
 					var currentLat = currentCenter.lat;
 					var currentLng = currentCenter.lng;
-					// updateText(currentLat,currentLng, bounds);
-					
+					updateText(currentLat,currentLng, bounds);
+					console.log(updateText(currentLat,currentLng, bounds));
 				}
 
 				function updateText(lat,lng,bounds){
-					// var textinputLat = document.getElementById("lat");
-					// var textinputLng = document.getElementById('lng');
-
-					// textinputLat.value = lat;
-					// textinputLng.value = lng;
+					var textinputLat = searchBox.lat;
+					var textinputLng = searchBox.lat;
+					textinputLat = lat;
+					textinputLng = lng;
 				}
 				
 				// get the coor after it stop zooming 
