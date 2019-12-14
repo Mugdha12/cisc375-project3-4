@@ -258,6 +258,7 @@
 				}
 
 				function coorIntoAddress(){
+					//if(search.lat >= 44.940768 && search.lat )
 				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
 				$.getJSON(url, function(data){
 						searchBox.address = "";
