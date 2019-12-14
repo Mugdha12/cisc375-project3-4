@@ -62,6 +62,9 @@ th {
 .property{
 	background-color:#607EB3;
 }
+.policevisit{
+	background-color: #F4FAC3;
+}
 .other{
 	background-color: #B4CC7C;
 }
@@ -76,4 +79,6 @@ th {
 }
 #icon{ width: 7em; height: 7em;}
 #facts{float: right;}
+
+
 

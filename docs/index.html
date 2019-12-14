@@ -24,6 +24,8 @@
 
 	<link rel="stylesheet" href="css/index.css" ><link>
 	<link rel="stylesheet" href="css/normalize.css" ><link>
+
+	
 </head>
 <body onload="Prompt()">
    
@@ -104,6 +106,7 @@
 						Personal Crime: Grey <br>
 						Violent Crime: Red <br>
 						Property Crime: Blue<br>
+						Police Vist: Yellow <br>
 						Other: Green 
 					</fieldset>
 				</form>
@@ -430,7 +433,10 @@
 					//personal
 				}else if(lowCrimeName.includes('theft') || lowCrimeName.includes('burglary') || lowCrimeName.includes('robbery')|| lowCrimeName.includes('graffiti')||lowCrimeName.includes('property') || lowCrimeName.includes('vandalism')){
 					return "property"
-				}else{
+				}else if(lowCrimeName.includes('police visit')){
+					return "policevisit";
+				}
+				else{
 					return "other";
 				}
 			}
