@@ -258,9 +258,15 @@
 				}
 
 				function coorIntoAddress(){
-					//if(search.lat >= 44.940768 && search.lat )
-				var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
-				$.getJSON(url, function(data){
+					if(!(searchBox.lat >= 44.888386 && searchBox.lat <= 44.990698  && searchBox.lng >= -93.206992 && searchBox.lng <=  -93.003751))
+					{
+						searchBox.lat = 44.965272;
+						searchBox.lng = -93.104732;
+					}
+					else
+					{
+						var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+searchBox.lat+"&lon="+searchBox.lng;
+					$.getJSON(url, function(data){
 						searchBox.address = "";
 						if(data["address"]["house_number"] != null)
 						{
@@ -270,6 +276,8 @@
 					});
 					//console.log(searchBox.address);
 					updateMap();
+					}
+				
 				}
 				function populateIncidents()
 				{
